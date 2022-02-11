@@ -36,12 +36,22 @@ void move_rect(gorilla_t *gorilla)
     sfSprite_setTextureRect(gorilla->gorille.sprite, gorilla->gorille.rect);
 }
 
+void create_text(gorilla_t *gorilla)
+{
+    gorilla->quote.text = sfText_create();
+    gorilla->quote.position = (sfVector2f){800, 50};
+    sfText_setPosition(gorilla->quote.text, gorilla->quote.position);
+    sfFont *F_score = sfFont_createFromFile("media/Fonts/Candy_Beans.otf");
+    sfText_setFont(gorilla->quote.text, F_score);
+    sfText_setCharacterSize(gorilla->quote.text, 50);
+}
+
 int main(int argc, char **argv)
 {
     gorilla_t gorilla;
     sfEvent event;
     sfVideoMode mode = {1920, 1080, 64};
-    gorilla.window = sfRenderWindow_create(mode, "MY_GORRILA", sfResize | sfClose, NULL);
+    gorilla.window = sfRenderWindow_create(mode, "MY_GORLILA", sfResize | sfClose, NULL);
     sfRenderWindow_setPosition(gorilla.window, (sfVector2i){0, 0});
     sfRenderWindow_setFramerateLimit(gorilla.window, 12);
     gorilla.over = false;
@@ -51,6 +61,7 @@ int main(int argc, char **argv)
     gorilla.clock = sfClock_create();
     create_sprite(&gorilla);
     create_bg(&gorilla);
+    create_text(&gorilla);
     while (sfRenderWindow_isOpen(gorilla.window)) {
         sfRenderWindow_clear(gorilla.window, sfBlack);
         while (sfRenderWindow_pollEvent(gorilla.window, &event)) {
@@ -67,6 +78,8 @@ int main(int argc, char **argv)
             sfRenderWindow_drawSprite(gorilla.window, gorilla.bg.sprite, NULL);
             sfRenderWindow_drawSprite(gorilla.window, gorilla.gorille.sprite, NULL);
             move_rect(&gorilla);
+            sfText_setString(gorilla.quote.text, "abcde");
+            sfRenderWindow_drawText(gorilla.window, gorilla.quote.text, NULL);
             sfRenderWindow_display(gorilla.window);
             sfClock_restart(gorilla.clock);
         }

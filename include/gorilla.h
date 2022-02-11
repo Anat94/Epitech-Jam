@@ -45,16 +45,21 @@ typedef struct bg_sprite_s {
     sfVector2f scale;
 } bg_sprite_t;
 
+typedef struct quote_s{
+    char *str;
+    sfText *text;
+    sfVector2f position;
+
+} quote_t;
 typedef struct gorilla_s {
-    char **quote;
     sfRenderWindow *window;
     sfClock *clock;
     int score;
     sfBool over;
     sfBool win;
     sfBool pause;
-    sfText *level;
     sfMusic *fond;
     gorille_sprite_t gorille;
     bg_sprite_t bg;
+    quote_t quote;
 } gorilla_t;
