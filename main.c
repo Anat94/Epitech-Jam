@@ -43,7 +43,7 @@ int main(int argc, char **argv)
     sfVideoMode mode = {1920, 1080, 64};
     gorilla.window = sfRenderWindow_create(mode, "MY_GORRILA", sfResize | sfClose, NULL);
     sfRenderWindow_setPosition(gorilla.window, (sfVector2i){0, 0});
-    sfRenderWindow_setFramerateLimit(gorilla.window, 60);
+    sfRenderWindow_setFramerateLimit(gorilla.window, 12);
     gorilla.over = false;
     gorilla.win = false;
     gorilla.pause = false;
@@ -64,13 +64,11 @@ int main(int argc, char **argv)
             }
         }
         if (gorilla.pause == false && gorilla.win == false && gorilla.over == false) {
-            if (sfTime_asMilliseconds(sfClock_getElapsedTime(gorilla.clock)) > 1) {
-                sfRenderWindow_drawSprite(gorilla.window, gorilla.bg.sprite, NULL);
-                sfRenderWindow_drawSprite(gorilla.window, gorilla.gorille.sprite, NULL);
-                move_rect(&gorilla);
-                sfRenderWindow_display(gorilla.window);
-                sfClock_restart(gorilla.clock);
-            }
+            sfRenderWindow_drawSprite(gorilla.window, gorilla.bg.sprite, NULL);
+            sfRenderWindow_drawSprite(gorilla.window, gorilla.gorille.sprite, NULL);
+            move_rect(&gorilla);
+            sfRenderWindow_display(gorilla.window);
+            sfClock_restart(gorilla.clock);
         }
     }
     return 0;
