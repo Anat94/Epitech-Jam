@@ -29,7 +29,7 @@ void create_bg(gorilla_t *gorilla) {
 
 void move_rect(gorilla_t *gorilla)
 {
-    if (gorilla->gorille.rect.left >= 1560)
+    if (gorilla->gorille.rect.left >= 1430)
         gorilla->gorille.rect.left = 0;
     else
         gorilla->gorille.rect.left = gorilla->gorille.rect.left + 130;
@@ -64,7 +64,7 @@ int main(int argc, char **argv)
             }
         }
         if (gorilla.pause == false && gorilla.win == false && gorilla.over == false) {
-            if (sfTime_asMilliseconds(sfClock_getElapsedTime(gorilla.clock)) > 10) {
+            if (sfTime_asMilliseconds(sfClock_getElapsedTime(gorilla.clock)) > 1) {
                 sfRenderWindow_drawSprite(gorilla.window, gorilla.bg.sprite, NULL);
                 sfRenderWindow_drawSprite(gorilla.window, gorilla.gorille.sprite, NULL);
                 move_rect(&gorilla);
