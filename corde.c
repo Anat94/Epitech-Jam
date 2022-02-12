@@ -13,11 +13,9 @@ void create_sprite(gorilla_t *gorilla) {
     gorilla->gorille.sprite = sfSprite_create();
     gorilla->gorille.texture = sfTexture_createFromFile("media/unnamed.png", NULL);
     gorilla->gorille.position = (sfVector2f){1920.0/2.0 - 250.0, 500};
-    //gorilla->gorille.scale = (sfVector2f){2,2};
     gorilla->gorille.rect = (sfIntRect){0, 0, 500, 389};
     sfSprite_setTexture(gorilla->gorille.sprite, gorilla->gorille.texture, sfTrue);
     sfSprite_setPosition(gorilla->gorille.sprite, gorilla->gorille.position);
-    //sfSprite_setScale(gorilla->gorille.sprite, gorilla->gorille.scale);
     sfSprite_setTextureRect(gorilla->gorille.sprite, gorilla->gorille.rect);
 }
 
@@ -38,7 +36,7 @@ void move_rect(gorilla_t *gorilla)
             gorilla->gorille.rect.left = gorilla->gorille.rect.left + 500;
         sfSprite_setTextureRect(gorilla->gorille.sprite, gorilla->gorille.rect);
     } else
-        gorilla->gorille.rect.left = 1550;
+        gorilla->gorille.rect.left = 0;
 }
 
 void create_text(gorilla_t *gorilla)
@@ -72,6 +70,7 @@ int corde(gorilla_t *gorilla)
     gorilla->pause = false;
     gorilla->score = 0;
     gorilla->clock = sfClock_create();
+    gorilla->is_jumping = false;
     sfClock *clock_wait = sfClock_create();
 
 
@@ -143,7 +142,7 @@ int corde(gorilla_t *gorilla)
 
             if (sfKeyboard_isKeyPressed(sfKeySpace) || (event.type == sfEvtJoystickButtonPressed)) {
                 if (sfTime_asMilliseconds(sfClock_getElapsedTime(gorilla->clock)) > 1) {
-                    if (((gorilla->cursor.position.x + gorilla->cursor.size.x) >= bar->rect_pos.x) && ((gorilla->cursor.position.x + gorilla->cursor.size.x) <= (bar->rect_pos.x + bar->rect_size.x))) {
+                    if ((((gorilla->cursor.position.x + gorilla->cursor.size.x) >= bar->rect_pos.x) && ((gorilla->cursor.position.x + gorilla->cursor.size.x) <= (bar->rect_pos.x + bar->rect_size.x))) && gorilla->is_jumping != true) {
                         new_round(bar, gorilla->score);
                         gorilla->is_jumping = true;
                         gorilla->score++;
@@ -176,7 +175,7 @@ int corde(gorilla_t *gorilla)
             sfRenderWindow_drawRectangleShape(gorilla->window, bar->rectangle, NULL);
             sfRenderWindow_drawRectangleShape(gorilla->window, gorilla->cursor.rectangle, NULL);
             sfRenderWindow_drawText(gorilla->window, gorilla->quote.text, NULL);
-            if (sfTime_asSeconds(sfClock_getElapsedTime(clock_wait)) > 10) {
+            if (sfTime_asSeconds(sfClock_getElapsedTime(clock_wait)) > 3) {
                 gorilla->is_jumping = false;
             }
             move_rect(gorilla);
