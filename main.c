@@ -138,19 +138,23 @@ int main(int argc, char **argv)
                 gorilla.pause = false;
             }
             if (sfKeyboard_isKeyPressed(sfKeySpace) || (event.type == sfEvtJoystickButtonPressed)) {
-                new_round(bar, gorilla.score);
-                gorilla.score++;
-                str = gorilla.quote_bdd[i];
-                if (strlen(str) > 75)
-                    sfText_setCharacterSize(gorilla.quote.text, 25);
-                else
-                    sfText_setCharacterSize(gorilla.quote.text, 50);
+                if (((gorilla.cursor.position.x + gorilla.cursor.size.x) >= bar->rect_pos.x) && ((gorilla.cursor.position.x + gorilla.cursor.size.x) <= (bar->rect_pos.x + bar->rect_size.x))) {
+                    new_round(bar, gorilla.score);
+                    gorilla.score++;
+                    str = gorilla.quote_bdd[i];
+                    if (strlen(str) > 75)
+                        sfText_setCharacterSize(gorilla.quote.text, 25);
+                    else
+                        sfText_setCharacterSize(gorilla.quote.text, 50);
 
-                if (i == 23)
-                    i = 0;
-                else
-                    i++;
-                sfText_setString(gorilla.quote.text, str);
+                    if (i == 23)
+                        i = 0;
+                    else
+                        i++;
+                    sfText_setString(gorilla.quote.text, str);
+                } else {
+                    //aie
+                }
             }
         }
         if (gorilla.pause == false && gorilla.win == false && gorilla.over == false) {
