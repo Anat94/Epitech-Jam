@@ -84,6 +84,11 @@ int main(int argc, char **argv)
             move_rect(&gorilla);
             printf("%s\n", gorilla.quote_bdd[i]);
             char *str = gorilla.quote_bdd[i];
+            if (strlen(str) > 100)
+                sfText_setCharacterSize(gorilla.quote.text, 25);
+            else
+                sfText_setCharacterSize(gorilla.quote.text, 50);
+
             if (i == 23)
                 i = 0;
             else
