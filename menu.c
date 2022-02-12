@@ -25,6 +25,9 @@ int main(int argc, char **argv)
     sfRenderWindow_setFramerateLimit(gorilla.window, 12);
     sfEvent event;
     init_bg(&gorilla);
+    gorilla.menu.corde = false;
+    gorilla.menu.fitness = false;
+    gorilla.menu.gamemode= strdup(" ");
     while (sfRenderWindow_isOpen(gorilla.window)) {
         sfRenderWindow_clear(gorilla.window, sfBlack);
         while (sfRenderWindow_pollEvent(gorilla.window, &event)) {
@@ -34,15 +37,31 @@ int main(int argc, char **argv)
             if (sfKeyboard_isKeyPressed(sfKeyLeft)) {
                 gorilla.menu.texture = sfTexture_createFromFile("media/UnderlineCorde.png", NULL);
                 sfSprite_setTexture(gorilla.menu.sprite, gorilla.menu.texture, sfTrue);
+                gorilla.menu.corde = true;
             }
             if (sfKeyboard_isKeyPressed(sfKeyRight)) {
                 gorilla.menu.texture = sfTexture_createFromFile("media/UnderlineFitness.png", NULL);
                 sfSprite_setTexture(gorilla.menu.sprite, gorilla.menu.texture, sfTrue);
+                gorilla.menu.fitness = true;
+            }
+            if (gorilla.menu.corde == true) {
+                if (sfKeyboard_isKeyPressed(sfKeyEnter)) {
+                    gorilla.menu.gamemode = strdup("Corde");
+                }
+            }
+            if (gorilla.menu.fitness == true){
+                if (sfKeyboard_isKeyPressed(sfKeyEnter)) {
+                    gorilla.menu.gamemode = strdup("fitness");
+                }
             }
 
         }
         sfRenderWindow_drawSprite(gorilla.window, gorilla.menu.sprite, NULL);
         sfRenderWindow_display(gorilla.window);
+        if (strcmp(gorilla.menu.gamemode, "Corde") == 0)
+            printf("GAME MENU = CORDE\n");
+        if (strcmp(gorilla.menu.gamemode, "fitness") == 0)
+            printf("GAME MENU = FITNESS\n");
     }
     return 0;
 }

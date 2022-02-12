@@ -74,7 +74,10 @@ typedef struct quote_s{
 
 typedef struct menu_s {
     sfSprite *sprite;
-    sfTexture *texture
+    sfTexture *texture;
+    sfBool corde;
+    sfBool fitness;
+    char * gamemode;
 } menu_t;
 
 typedef struct gorilla_s {
