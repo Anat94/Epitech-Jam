@@ -72,6 +72,11 @@ typedef struct quote_s{
 
 } quote_t;
 
+typedef struct menu_s {
+    sfSprite *sprite;
+    sfTexture *texture
+} menu_t;
+
 typedef struct gorilla_s {
     sfRenderWindow *window;
     sfClock *clock;
@@ -86,6 +91,7 @@ typedef struct gorilla_s {
     quote_t quote;
     cursor_t cursor;
     char **quote_bdd;
+    menu_t menu;
 } gorilla_t;
 
 

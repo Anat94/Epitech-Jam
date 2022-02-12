@@ -7,8 +7,9 @@
 
 NAME	=	my_binary
 
-SRC		=	main.c \
-			bdd.c
+SRC		=	menu.c
+# main.c \
+# 			bdd.c
 			#call_API.c
 
 OBJ		=	$(SRC:.c=.o)

@@ -13,7 +13,7 @@ void create_sprite(gorilla_t *gorilla) {
     gorilla->gorille.sprite = sfSprite_create();
     gorilla->gorille.texture = sfTexture_createFromFile("media/singe.png", NULL);
     gorilla->gorille.position = (sfVector2f){1920.0/2.0 - 65.0, 500};
-    gorilla->gorille.scale = (sfVector2f){2,2};
+    gorilla->gorille.scale = (sfVector2f){2, 2};
     gorilla->gorille.rect = (sfIntRect){0, 0, 130, 180};
     sfSprite_setTexture(gorilla->gorille.sprite, gorilla->gorille.texture, sfTrue);
     sfSprite_setPosition(gorilla->gorille.sprite, gorilla->gorille.position);
