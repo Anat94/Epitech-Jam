@@ -124,6 +124,8 @@ int main(int argc, char **argv)
     sfMusic *win_sound = sfMusic_createFromFile("media/Music/jecodeaveclecul.ogg");
 
     bool aller = true;
+    gorilla.clock = sfClock_create();
+
     while (sfRenderWindow_isOpen(gorilla.window)) {
 
         sfRenderWindow_clear(gorilla.window, sfBlack);
@@ -139,26 +141,30 @@ int main(int argc, char **argv)
             if (sfKeyboard_isKeyPressed(sfKeyN)) {
                 gorilla.pause = false;
             }
-            if (sfKeyboard_isKeyPressed(sfKeySpace) || (event.type == sfEvtJoystickButtonPressed)) {
-                if (((gorilla.cursor.position.x + gorilla.cursor.size.x) >= bar->rect_pos.x) && ((gorilla.cursor.position.x + gorilla.cursor.size.x) <= (bar->rect_pos.x + bar->rect_size.x))) {
-                    new_round(bar, gorilla.score);
-                    gorilla.score++;
-                    str = gorilla.quote_bdd[i];
-                    if (strlen(str) > 75)
-                        sfText_setCharacterSize(gorilla.quote.text, 25);
-                    else
-                        sfText_setCharacterSize(gorilla.quote.text, 50);
 
-                    if (i == 23)
-                        i = 0;
-                    else
-                        i++;
-                    sfText_setString(gorilla.quote.text, str);
-                    printf("JE RENTRE DANS LE IF\n");
-                } else {
-                    sfMusic_stop(gorilla.hurt);
-                    sfMusic_play(gorilla.hurt);
-                    printf("JE RENTRE DANS LE ELSE\n");
+            if (sfKeyboard_isKeyPressed(sfKeySpace) || (event.type == sfEvtJoystickButtonPressed)) {
+                if (sfTime_asMilliseconds(sfClock_getElapsedTime(gorilla.clock)) > 1) {
+                    if (((gorilla.cursor.position.x + gorilla.cursor.size.x) >= bar->rect_pos.x) && ((gorilla.cursor.position.x + gorilla.cursor.size.x) <= (bar->rect_pos.x + bar->rect_size.x))) {
+                        new_round(bar, gorilla.score);
+                        gorilla.score++;
+                        str = gorilla.quote_bdd[i];
+                        if (strlen(str) > 75)
+                            sfText_setCharacterSize(gorilla.quote.text, 25);
+                        else
+                            sfText_setCharacterSize(gorilla.quote.text, 50);
+
+                        if (i == 23)
+                            i = 0;
+                        else
+                            i++;
+                        sfText_setString(gorilla.quote.text, str);
+                        printf("JE RENTRE DANS LE IF\n");
+                    } else {
+                        sfMusic_stop(gorilla.hurt);
+                        sfMusic_play(gorilla.hurt);
+                        printf("JE RENTRE DANS LE ELSE\n");
+                    }
+                    sfClock_restart(gorilla.clock);
                 }
             }
         }
