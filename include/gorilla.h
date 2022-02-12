@@ -109,4 +109,5 @@ typedef struct gorilla_s {
 int call_API(void);
 void init_bdd(gorilla_t *gorilla);
 int corde(gorilla_t *gorilla);
+int fitness(gorilla_t *gorilla);
 

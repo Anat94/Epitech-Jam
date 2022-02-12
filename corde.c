@@ -32,6 +32,7 @@ void create_victory(gorilla_t *gorilla) {
     gorilla->victory.texture = sfTexture_createFromFile("media/winnerCorde.png", NULL);
     sfSprite_setPosition(gorilla->victory.sprite, (sfVector2f){0.0, 0.0});
     sfSprite_setTexture(gorilla->victory.sprite, gorilla->victory.texture, sfTrue);
+    sfSprite_setScale(gorilla->victory.sprite, (sfVector2f){1, 0.97});
 }
 
 void move_rect(gorilla_t *gorilla)
