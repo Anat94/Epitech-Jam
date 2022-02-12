@@ -12,7 +12,7 @@
 void init_bg(gorilla_t *gorilla)
 {
     gorilla->menu.sprite = sfSprite_create();
-    gorilla->menu.texture = sfTexture_createFromFile("media/Olympic.png", NULL);
+    gorilla->menu.texture = sfTexture_createFromFile("media/Olympic.jpg", NULL);
     sfSprite_setTexture(gorilla->menu.sprite, gorilla->menu.texture, sfTrue);
 }
 
@@ -31,12 +31,15 @@ int main(int argc, char **argv)
             if (event.type == sfEvtClosed) {
                 sfRenderWindow_close(gorilla.window);
             }
-            if (sfKeyboard_isKeyPressed(sfKeyP)) {
-                gorilla.pause = true;
+            if (sfKeyboard_isKeyPressed(sfKeyLeft)) {
+                gorilla.menu.texture = sfTexture_createFromFile("media/UnderlineCorde.png", NULL);
+                sfSprite_setTexture(gorilla.menu.sprite, gorilla.menu.texture, sfTrue);
             }
-            if (sfKeyboard_isKeyPressed(sfKeyN)) {
-                gorilla.pause = false;
+            if (sfKeyboard_isKeyPressed(sfKeyRight)) {
+                gorilla.menu.texture = sfTexture_createFromFile("media/UnderlineFitness.png", NULL);
+                sfSprite_setTexture(gorilla.menu.sprite, gorilla.menu.texture, sfTrue);
             }
+
         }
         sfRenderWindow_drawSprite(gorilla.window, gorilla.menu.sprite, NULL);
         sfRenderWindow_display(gorilla.window);
