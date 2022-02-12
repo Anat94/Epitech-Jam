@@ -103,7 +103,7 @@ int main(int argc, char **argv)
     gorilla.cursor.sprite = sfSprite_create();
     gorilla.cursor.texture = sfTexture_createFromFile("media/BarreMillieu.png", NULL);
     gorilla.cursor.rectangle = sfRectangleShape_create();
-    gorilla.cursor.position = (sfVector2f){1920/2-(200), bar->rect_pos.y};
+    gorilla.cursor.position = (sfVector2f){774, bar->rect_pos.y};
     gorilla.cursor.size = (sfVector2f){5.0, 63.0};
     sfRectangleShape_setPosition(gorilla.cursor.rectangle, gorilla.cursor.position);
     sfRectangleShape_setFillColor(gorilla.cursor.rectangle, sfBlack);
@@ -154,9 +154,9 @@ int main(int argc, char **argv)
             if (bar->rect_size.x <= 5){
                 gorilla.win = true;
             }
-            if (gorilla.cursor.position.x > 1150)
+            if (gorilla.cursor.position.x > 1143)
                 aller = false;
-            if (gorilla.cursor.position.x <= 1920/2-(200))
+            if (gorilla.cursor.position.x <= 774)
                 aller = true;
             if (aller == true)
                 gorilla.cursor.position.x += 10;
@@ -175,8 +175,6 @@ int main(int argc, char **argv)
                 else
                     i++;
                 sfText_setString(gorilla.quote.text, str);
-                // gorilla.score++;
-                // new_round(bar, gorilla.score);
                 sfClock_restart(gorilla.clock);
             }
             sfRenderWindow_display(gorilla.window);
