@@ -21,8 +21,8 @@ void create_sprite2(gorilla_t *gorilla) {
 
 void create_bg2(gorilla_t *gorilla) {
     gorilla->bg.sprite = sfSprite_create();
-    gorilla->bg.texture = sfTexture_createFromFile("media/Background.png", NULL);
-    gorilla->bg.scale = (sfVector2f){0.64, 0.54};
+    gorilla->bg.texture = sfTexture_createFromFile("media/antarctique.jpg", NULL);
+    gorilla->bg.scale = (sfVector2f){1.875, 1.40625};
     sfSprite_setTexture(gorilla->bg.sprite, gorilla->bg.texture, sfTrue);
     sfSprite_setScale(gorilla->bg.sprite, gorilla->bg.scale);
 }
