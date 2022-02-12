@@ -121,6 +121,8 @@ int main(int argc, char **argv)
     sfMusic_play(gorilla.fond);
     sfMusic_setLoop(gorilla.fond, true);
     gorilla.hurt = sfMusic_createFromFile("media/Music/classic_hurt.ogg");
+    sfMusic *win_sound = sfMusic_createFromFile("media/Music/jecodeaveclecul.ogg");
+
     bool aller = true;
     while (sfRenderWindow_isOpen(gorilla.window)) {
 
@@ -152,8 +154,11 @@ int main(int argc, char **argv)
                     else
                         i++;
                     sfText_setString(gorilla.quote.text, str);
+                }
+                if (((gorilla.cursor.position.x + gorilla.cursor.size.x) >= bar->rect_pos.x) && ((gorilla.cursor.position.x + gorilla.cursor.size.x) <= (bar->rect_pos.x + bar->rect_size.x))) {
+                    sfMusic_stop(win_sound);
+                    sfMusic_play(win_sound);
                 } else {
-                    //aie
                     sfMusic_stop(gorilla.hurt);
                     sfMusic_play(gorilla.hurt);
                 }
