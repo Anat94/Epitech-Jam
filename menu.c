@@ -27,7 +27,6 @@ int main(int argc, char **argv)
     init_bg(&gorilla);
     gorilla.menu.corde = false;
     gorilla.menu.fitness = false;
-    gorilla.menu.gamemode= strdup(" ");
     while (sfRenderWindow_isOpen(gorilla.window)) {
         sfRenderWindow_clear(gorilla.window, sfBlack);
         while (sfRenderWindow_pollEvent(gorilla.window, &event)) {
@@ -46,13 +45,13 @@ int main(int argc, char **argv)
             }
             if (gorilla.menu.corde == true) {
                 if (sfKeyboard_isKeyPressed(sfKeyEnter)) {
-                    gorilla.menu.gamemode = strdup("Corde");
                     corde(&gorilla);
                 }
             }
             if (gorilla.menu.fitness == true){
                 if (sfKeyboard_isKeyPressed(sfKeyEnter)) {
                     gorilla.menu.gamemode = strdup("fitness");
+                    fitness(&gorilla);
                 }
             }
 

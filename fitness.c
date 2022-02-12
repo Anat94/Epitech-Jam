@@ -5,7 +5,11 @@
 ** fitness.c
 */
 
-int init_fitness()
+#include "gorilla.h"
+#include <string.h>
+#include <time.h>
+
+int fitness(gorilla_t *gorilla)
 {
 
 }

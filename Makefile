@@ -8,8 +8,9 @@
 NAME	=	my_binary
 
 SRC		= 	menu.c \
-			main.c \
+			corde.c \
  			bdd.c \
+			fitness.c
 
 OBJ		=	$(SRC:.c=.o)
 

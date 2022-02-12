@@ -31,14 +31,14 @@ void create_bg(gorilla_t *gorilla) {
 
 void move_rect(gorilla_t *gorilla)
 {
-    gorilla->gorille.rect.left = 1550;
     if (gorilla->is_jumping == true) {
         if (gorilla->gorille.rect.left >= 15500)
             gorilla->gorille.rect.left = 13500;
         else
             gorilla->gorille.rect.left = gorilla->gorille.rect.left + 500;
         sfSprite_setTextureRect(gorilla->gorille.sprite, gorilla->gorille.rect);
-    }
+    } else
+        gorilla->gorille.rect.left = 1550;
 }
 
 void create_text(gorilla_t *gorilla)
@@ -176,7 +176,7 @@ int corde(gorilla_t *gorilla)
             sfRenderWindow_drawRectangleShape(gorilla->window, bar->rectangle, NULL);
             sfRenderWindow_drawRectangleShape(gorilla->window, gorilla->cursor.rectangle, NULL);
             sfRenderWindow_drawText(gorilla->window, gorilla->quote.text, NULL);
-            if (sfTime_asSeconds(sfClock_getElapsedTime(clock_wait)) >= 10) {
+            if (sfTime_asSeconds(sfClock_getElapsedTime(clock_wait)) > 10) {
                 gorilla->is_jumping = false;
             }
             move_rect(gorilla);
