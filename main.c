@@ -72,9 +72,10 @@ int main(int argc, char **argv)
                 sfRenderWindow_close(gorilla.window);
             }
             if (sfKeyboard_isKeyPressed(sfKeyP)) {
-                sfRenderWindow_clear(gorilla.window, sfBlack);
                 gorilla.pause = true;
-                sfRenderWindow_display(gorilla.window);
+            }
+            if (sfKeyboard_isKeyPressed(sfKeyN)) {
+                gorilla.pause = false;
             }
         }
         if (gorilla.pause == false && gorilla.win == false && gorilla.over == false) {
