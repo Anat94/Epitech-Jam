@@ -7,7 +7,8 @@
 
 NAME	=	my_binary
 
-SRC		=	main.c
+SRC		=	main.c \
+			#call_API.c
 
 OBJ		=	$(SRC:.c=.o)
 
@@ -18,7 +19,7 @@ CPPFLAGS = -iquote./include/
 CFLAGS = -lcsfml-system -lcsfml-window -lcsfml-graphics -lcsfml-audio -lcurl
 
 $(NAME): $(OBJ)
-	gcc $(OBJ) -o $(NAME) $(CFLAGS) $(CWARNS) $(CPPFLAGS) $(CSFMLFLASGS) -g
+	gcc $(OBJ) -o $(NAME) $(CFLAGS) $(CWARNS) $(CPPFLAGS) $(CSFMLFLASGS)
 
 debug:
 	gcc $(OBJ) -o $(NAME) $(CFLAGS) $(CWARNS) $(CPPFLAGS) $(CSFMLFLASGS) -g3

@@ -30,6 +30,9 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 typedef struct gorille_sprite_s {
     sfSprite *sprite;
@@ -62,4 +65,8 @@ typedef struct gorilla_s {
     gorille_sprite_t gorille;
     bg_sprite_t bg;
     quote_t quote;
+    char **quote_bdd;
 } gorilla_t;
+
+
+int call_API(void);

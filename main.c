@@ -10,7 +10,7 @@
 void create_sprite(gorilla_t *gorilla) {
     gorilla->gorille.sprite = sfSprite_create();
     gorilla->gorille.texture = sfTexture_createFromFile("media/singe.png", NULL);
-    gorilla->gorille.position = (sfVector2f){500, 500};
+    gorilla->gorille.position = (sfVector2f){1920.0/2.0 - 65.0, 500};
     gorilla->gorille.scale = (sfVector2f){2,2};
     gorilla->gorille.rect = (sfIntRect){0, 0, 130, 180};
     sfSprite_setTexture(gorilla->gorille.sprite, gorilla->gorille.texture, sfTrue);
@@ -22,7 +22,7 @@ void create_sprite(gorilla_t *gorilla) {
 void create_bg(gorilla_t *gorilla) {
     gorilla->bg.sprite = sfSprite_create();
     gorilla->bg.texture = sfTexture_createFromFile("media/Background.png", NULL);
-    gorilla->bg.scale = (sfVector2f){0.8, 0.8};
+    gorilla->bg.scale = (sfVector2f){0.64, 0.54};
     sfSprite_setTexture(gorilla->bg.sprite, gorilla->bg.texture, sfTrue);
     sfSprite_setScale(gorilla->bg.sprite, gorilla->bg.scale);
 }
@@ -81,7 +81,6 @@ int main(int argc, char **argv)
             sfText_setString(gorilla.quote.text, "abcde");
             sfRenderWindow_drawText(gorilla.window, gorilla.quote.text, NULL);
             sfRenderWindow_display(gorilla.window);
-            sfClock_restart(gorilla.clock);
         }
     }
     return 0;
