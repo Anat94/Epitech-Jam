@@ -51,13 +51,14 @@ void create_text(gorilla_t *gorilla)
 
 float random_pos_bar(bar_t *bar)
 {
-    return (rand() % 400) + (1920/2-193);
+    return (rand() % (400 - (int)bar->rect_size.x)) + (1920/2-193);
 }
 
 // a appeler quand il clique au bon moment
 void new_round(bar_t *bar, int round) {
-    bar->rect_size.x = 100 - (round * 1.5);
+    bar->rect_size.x = 100 - (round * 15);
     bar->rect_pos.x = random_pos_bar(bar);
+    sfRectangleShape_setSize(bar->rectangle, bar->rect_size);
     sfRectangleShape_setPosition(bar->rectangle, bar->rect_pos);
 }
 
@@ -143,6 +144,10 @@ int main(int argc, char **argv)
             if (sfKeyboard_isKeyPressed(sfKeyN)) {
                 gorilla.pause = false;
             }
+            if (sfKeyboard_isKeyPressed(sfKeySpace)) {
+                new_round(bar, gorilla.score);
+                gorilla.score++;
+            }
         }
         if (gorilla.pause == false && gorilla.win == false && gorilla.over == false) {
             sfRenderWindow_drawSprite(gorilla.window, gorilla.bg.sprite, NULL);
@@ -152,7 +157,10 @@ int main(int argc, char **argv)
             //sfRenderWindow_drawRectangleShape(gorilla.window, gorilla.cursor.rectangle, NULL);
             sfRenderWindow_drawText(gorilla.window, gorilla.quote.text, NULL);
             move_rect(&gorilla);
-            if (sfTime_asSeconds(sfClock_getElapsedTime(gorilla.clock)) > 10) {
+            if (bar->rect_size.x <= 5){
+                gorilla.win = true;
+            }
+            if (sfTime_asSeconds(sfClock_getElapsedTime(gorilla.clock)) > 3) {
                 str = gorilla.quote_bdd[i];
                 if (strlen(str) > 75)
                     sfText_setCharacterSize(gorilla.quote.text, 25);
