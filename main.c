@@ -175,8 +175,8 @@ int main(int argc, char **argv)
                 else
                     i++;
                 sfText_setString(gorilla.quote.text, str);
-                gorilla.score++;
-                new_round(bar, gorilla.score);
+                // gorilla.score++;
+                // new_round(bar, gorilla.score);
                 sfClock_restart(gorilla.clock);
             }
             sfRenderWindow_display(gorilla.window);
