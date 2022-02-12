@@ -9,7 +9,6 @@
 #include <string.h>
 #include <time.h>
 
-
 void create_sprite(gorilla_t *gorilla) {
     gorilla->gorille.sprite = sfSprite_create();
     gorilla->gorille.texture = sfTexture_createFromFile("media/singe.png", NULL);
@@ -138,9 +137,20 @@ int main(int argc, char **argv)
             if (sfKeyboard_isKeyPressed(sfKeyN)) {
                 gorilla.pause = false;
             }
-            if (sfKeyboard_isKeyPressed(sfKeySpace)) {
+            if (sfKeyboard_isKeyPressed(sfKeySpace) || (event.type == sfEvtJoystickButtonPressed)) {
                 new_round(bar, gorilla.score);
                 gorilla.score++;
+                str = gorilla.quote_bdd[i];
+                if (strlen(str) > 75)
+                    sfText_setCharacterSize(gorilla.quote.text, 25);
+                else
+                    sfText_setCharacterSize(gorilla.quote.text, 50);
+
+                if (i == 23)
+                    i = 0;
+                else
+                    i++;
+                sfText_setString(gorilla.quote.text, str);
             }
         }
         if (gorilla.pause == false && gorilla.win == false && gorilla.over == false) {
@@ -163,20 +173,6 @@ int main(int argc, char **argv)
             else
                 gorilla.cursor.position.x -= 10;
             sfRectangleShape_setPosition(gorilla.cursor.rectangle, gorilla.cursor.position);
-            if (sfTime_asSeconds(sfClock_getElapsedTime(gorilla.clock)) > 3) {
-                str = gorilla.quote_bdd[i];
-                if (strlen(str) > 75)
-                    sfText_setCharacterSize(gorilla.quote.text, 25);
-                else
-                    sfText_setCharacterSize(gorilla.quote.text, 50);
-
-                if (i == 23)
-                    i = 0;
-                else
-                    i++;
-                sfText_setString(gorilla.quote.text, str);
-                sfClock_restart(gorilla.clock);
-            }
             sfRenderWindow_display(gorilla.window);
         }
     }
