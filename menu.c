@@ -12,8 +12,8 @@
 void init_bg(gorilla_t *gorilla)
 {
     gorilla->menu.sprite = sfSprite_create();
-    gorilla->menu.texture = sfTexture_createFromFile("media/Background.png", NULL);
-    sfSprite_setTexture(gorilla->bg.sprite, gorilla->bg.texture, sfTrue);
+    gorilla->menu.texture = sfTexture_createFromFile("media/Olympic.png", NULL);
+    sfSprite_setTexture(gorilla->menu.sprite, gorilla->menu.texture, sfTrue);
 }
 
 int main(int argc, char **argv)
@@ -29,8 +29,6 @@ int main(int argc, char **argv)
         sfRenderWindow_clear(gorilla.window, sfBlack);
         while (sfRenderWindow_pollEvent(gorilla.window, &event)) {
             if (event.type == sfEvtClosed) {
-                sfMusic_destroy(gorilla.fond);
-                sfMusic_destroy(gorilla.hurt);
                 sfRenderWindow_close(gorilla.window);
             }
             if (sfKeyboard_isKeyPressed(sfKeyP)) {
@@ -41,6 +39,7 @@ int main(int argc, char **argv)
             }
         }
         sfRenderWindow_drawSprite(gorilla.window, gorilla.menu.sprite, NULL);
+        sfRenderWindow_display(gorilla.window);
     }
     return 0;
 }
