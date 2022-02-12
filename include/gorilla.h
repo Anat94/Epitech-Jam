@@ -52,8 +52,18 @@ typedef struct bar_s {
     sfSprite *sprite;
     sfTexture *texture;
     sfRectangleShape *rectangle;
+    sfVector2f pos;
+    sfVector2f rect_size;
+    sfVector2f rect_pos;
 }bar_t;
 
+typedef struct cursor_s {
+    sfSprite *sprite;
+    sfTexture *texture;
+    sfRectangleShape *rectangle;
+    sfVector2f position;
+    sfVector2f size;
+} cursor_t;
 
 typedef struct quote_s{
     char *str;
@@ -73,6 +83,7 @@ typedef struct gorilla_s {
     gorille_sprite_t gorille;
     bg_sprite_t bg;
     quote_t quote;
+    cursor_t cursor;
     char **quote_bdd;
 } gorilla_t;
 

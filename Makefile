@@ -20,7 +20,7 @@ CPPFLAGS = -iquote./include/
 CFLAGS = -lcsfml-system -lcsfml-window -lcsfml-graphics -lcsfml-audio -lcurl
 
 $(NAME): $(OBJ)
-	gcc $(OBJ) -o $(NAME) $(CFLAGS) $(CWARNS) $(CPPFLAGS) $(CSFMLFLASGS)
+	gcc $(OBJ) -o $(NAME) $(CFLAGS) $(CWARNS) $(CPPFLAGS) $(CSFMLFLASGS) -g
 
 debug:
 	gcc $(OBJ) -o $(NAME) $(CFLAGS) $(CWARNS) $(CPPFLAGS) $(CSFMLFLASGS) -g3

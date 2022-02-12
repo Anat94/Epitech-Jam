@@ -3,6 +3,10 @@
         "window.h": "c",
         "stdbool.h": "c",
         "gorilla.h": "c",
-        "sstream": "c"
+        "sstream": "c",
+        "array": "c",
+        "string_view": "c",
+        "initializer_list": "c",
+        "utility": "c"
     }
 }

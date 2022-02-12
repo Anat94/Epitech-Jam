@@ -49,6 +49,19 @@ void create_text(gorilla_t *gorilla)
     sfText_setCharacterSize(gorilla->quote.text, 25);
 }
 
+float random_pos_bar(bar_t *bar)
+{
+    return (rand() % 400) + (1920/2-193);
+}
+
+// a appeler quand il clique au bon moment
+void new_round(bar_t *bar, int round) {
+    bar->rect_size.x = 100 - (round * 1.5);
+    bar->rect_pos.x = random_pos_bar(bar);
+    sfSprite_setPosition(bar->sprite, bar->pos);
+}
+
+
 int main(int argc, char **argv)
 {
     gorilla_t gorilla;
@@ -63,21 +76,46 @@ int main(int argc, char **argv)
     gorilla.score = 0;
     gorilla.clock = sfClock_create();
 
-//-------------------------------------------------------------------------------
-    sfSprite *bar_s = sfSprite_create();
-    sfTexture *bar_t = sfTexture_createFromFile("media/BAR_vide.png", NULL);
-    sfRectangleShape *rectangle = sfRectangleShape_create();
-    sfVector2f rectangle_size = {100, 63};
-    sfVector2f bar_pos = {(1920/2-(200)), 900};
-    sfVector2f scale = {0.5, 0.5};
-    sfVector2f rectangle_pos = {1920/2-150, 907};
+/*------------------------------BAR----------------------------------------------*/
+    bar_t *bar = malloc(sizeof(bar_t));
 
-    sfRectangleShape_setSize(rectangle, rectangle_size);
-    sfRectangleShape_setFillColor(rectangle, sfGreen);
-    sfRectangleShape_setPosition(rectangle, rectangle_pos);
-    sfSprite_setPosition(bar_s, bar_pos);
-    sfSprite_setScale(bar_s, scale);
-    sfSprite_setTexture(bar_s, bar_t, sfFalse);
+    bar->sprite = sfSprite_create();
+    bar->texture = sfTexture_createFromFile("media/BAR_vide.png", NULL);
+    bar->rectangle = sfRectangleShape_create();
+    bar->rect_size.x = 100;
+    bar->rect_size.y = 63;
+    bar->pos.x = (1920/2-(200));
+    bar->pos.y = 900;
+    sfVector2f scale = {0.5, 0.5};
+    bar->rect_pos.x = random_pos_bar(bar);
+    bar->rect_pos.y = 907;
+
+    sfRectangleShape_setSize(bar->rectangle, bar->rect_size);
+    sfRectangleShape_setFillColor(bar->rectangle, sfGreen);
+    sfRectangleShape_setPosition(bar->rectangle, bar->rect_pos);
+    sfSprite_setPosition(bar->sprite, bar->pos);
+    sfSprite_setScale(bar->sprite, scale);
+    sfSprite_setTexture(bar->sprite, bar->texture, sfFalse);
+/*-------------------------------------------------------------------------------*/
+
+//---------------------------Create cursor---------------------------------------
+    // gorilla.cursor.sprite = sfSprite_create();
+    // gorilla.cursor.texture = sfTexture_createFromFile("media/xxx.png", NULL);
+    // gorilla.cursor.rectangle = sfRectangleShape_create();
+    // gorilla.cursor.position = (sfVector2f){1920/2-(200), 900};
+    // gorilla.cursor.size = (sfVector2f){5.0, 63.0};
+    // sfRectangleShape_setPosition(gorilla.cursor.rectangle, gorilla.cursor.position);
+    // sfRectangleShape_setFillColor(gorilla.cursor.rectangle, sfBlack);
+    // while (gorilla.cursor.position.x) {
+    //     if (gorilla.cursor.position.x == 1000) {
+    //         gorilla.cursor.position = (sfVector2f){1920/2-(200), 900};
+    //     } else
+    //         gorilla.cursor.position.x += 10;
+    // }
+    // sfRectangleShape_setPosition(gorilla.cursor.rectangle, gorilla.cursor.position);
+    // sfRectangleShape_setSize(gorilla.cursor.rectangle, gorilla.cursor.size);
+    // sfSprite_setTexture(gorilla.cursor.sprite, gorilla.cursor.texture, sfFalse);
+
 //-------------------------------------------------------------------------------
     create_sprite(&gorilla);
     create_bg(&gorilla);
@@ -90,7 +128,9 @@ int main(int argc, char **argv)
     sfMusic_play(gorilla.fond);
     sfMusic_setLoop(gorilla.fond, true);
     sfMusic_setVolume(gorilla.fond, 75);
+
     while (sfRenderWindow_isOpen(gorilla.window)) {
+
         sfRenderWindow_clear(gorilla.window, sfBlack);
         while (sfRenderWindow_pollEvent(gorilla.window, &event)) {
             if (event.type == sfEvtClosed) {
@@ -106,12 +146,13 @@ int main(int argc, char **argv)
         }
         if (gorilla.pause == false && gorilla.win == false && gorilla.over == false) {
             sfRenderWindow_drawSprite(gorilla.window, gorilla.bg.sprite, NULL);
-            sfRenderWindow_drawSprite(gorilla.window, bar_s, NULL);
-            sfRenderWindow_drawRectangleShape(gorilla.window, rectangle, NULL);
+            sfRenderWindow_drawSprite(gorilla.window, bar->sprite, NULL);
             sfRenderWindow_drawSprite(gorilla.window, gorilla.gorille.sprite, NULL);
+            sfRenderWindow_drawRectangleShape(gorilla.window, bar->rectangle, NULL);
+            //sfRenderWindow_drawRectangleShape(gorilla.window, gorilla.cursor.rectangle, NULL);
             sfRenderWindow_drawText(gorilla.window, gorilla.quote.text, NULL);
             move_rect(&gorilla);
-            if (sfTime_asSeconds(sfClock_getElapsedTime(gorilla.clock)) > 1) {
+            if (sfTime_asSeconds(sfClock_getElapsedTime(gorilla.clock)) > 10) {
                 str = gorilla.quote_bdd[i];
                 if (strlen(str) > 75)
                     sfText_setCharacterSize(gorilla.quote.text, 25);
@@ -123,6 +164,8 @@ int main(int argc, char **argv)
                 else
                     i++;
                 sfText_setString(gorilla.quote.text, str);
+                gorilla.score++;
+                new_round(bar, gorilla.score);
                 sfClock_restart(gorilla.clock);
             }
             sfRenderWindow_display(gorilla.window);
