@@ -46,6 +46,7 @@ void create_text2(gorilla_t *gorilla)
     sfText_setPosition(gorilla->quote.text, gorilla->quote.position);
     sfFont *F_score = sfFont_createFromFile("media/Fonts/Candy_Beans.otf");
     sfText_setFont(gorilla->quote.text, F_score);
+    sfText_setColor(gorilla->quote.text, sfBlack);
     sfText_setCharacterSize(gorilla->quote.text, 25);
 }
 
@@ -95,7 +96,26 @@ int fitness(gorilla_t *gorilla)
     sfSprite_setScale(bar->sprite, scale);
     sfSprite_setTexture(bar->sprite, bar->texture, sfFalse);
 /*-------------------------------------------------------------------------------*/
-
+/*-----------------------------------phrases-------------------------------------*/
+    sfSprite *bulle_s = sfSprite_create();
+    sfTexture *bulle_t = sfTexture_createFromFile("media/bulle.png", NULL);
+    sfSprite *gorilla_s = sfSprite_create();
+    sfTexture *happy_t = sfTexture_createFromFile("media/singe_content.png", NULL);
+    sfTexture *cool_t = sfTexture_createFromFile("media/singe_cool.png", NULL);
+    sfTexture *triste_t = sfTexture_createFromFile("media/singe_triste.png", NULL);
+    sfTexture *pas_content_t = sfTexture_createFromFile("media/singe_pas_content.png", NULL);
+    sfVector2f scale_bulle = {8.6, 2.0};
+    sfVector2f scale_gorille = {2, 2};
+    sfVector2f gorille_pos = {500, 200};
+    gorilla->angry = 0;
+    gorilla->happy = 0;
+    sfSprite_setTexture(bulle_s, bulle_t, sfFalse);
+    sfSprite_setTexture(gorilla_s, pas_content_t, sfFalse);
+    sfSprite_setTexture(gorilla_s, cool_t, sfFalse);
+    sfSprite_setPosition(gorilla_s, gorille_pos);
+    sfSprite_scale(bulle_s, scale_bulle);
+    sfSprite_scale(gorilla_s, scale_gorille);
+/*-------------------------------------------------------------------------------*/
 //---------------------------Create cursor---------------------------------------
     gorilla->cursor.sprite = sfSprite_create();
     gorilla->cursor.texture = sfTexture_createFromFile("media/BarreMillieu.png", NULL);
@@ -157,9 +177,19 @@ int fitness(gorilla_t *gorilla)
                         else
                             i++;
                         sfText_setString(gorilla->quote.text, str);
+                        sfSprite_setTexture(gorilla_s, cool_t, sfFalse);
+                        gorilla->angry = 0;
+                        gorilla->happy += 1;
+                        if (gorilla->happy >= 3)
+                            sfSprite_setTexture(gorilla_s, happy_t, sfFalse);
                         printf("JE RENTRE DANS LE IF\n");
                         sfClock_restart(clock_wait);
                     } else {
+                        gorilla->happy = 0;
+                        gorilla->angry += 1;
+                        sfSprite_setTexture(gorilla_s, triste_t, sfFalse);
+                        if (gorilla->angry >= 3)
+                            sfSprite_setTexture(gorilla_s, pas_content_t, sfFalse);
                         sfMusic_stop(gorilla->hurt);
                         sfMusic_play(gorilla->hurt);
                         printf("JE RENTRE DANS LE ELSE\n");
@@ -174,6 +204,8 @@ int fitness(gorilla_t *gorilla)
             sfRenderWindow_drawSprite(gorilla->window, gorilla->gorille.sprite, NULL);
             sfRenderWindow_drawRectangleShape(gorilla->window, bar->rectangle, NULL);
             sfRenderWindow_drawRectangleShape(gorilla->window, gorilla->cursor.rectangle, NULL);
+            sfRenderWindow_drawSprite(gorilla->window, bulle_s, NULL);
+            sfRenderWindow_drawSprite(gorilla->window, gorilla_s, NULL); 
             sfRenderWindow_drawText(gorilla->window, gorilla->quote.text, NULL);
             if (sfTime_asSeconds(sfClock_getElapsedTime(clock_wait)) > 2.7) {
                 gorilla->is_jumping = false;
