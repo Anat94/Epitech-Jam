@@ -58,7 +58,7 @@ float random_pos_bar(bar_t *bar)
 void new_round(bar_t *bar, int round) {
     bar->rect_size.x = 100 - (round * 1.5);
     bar->rect_pos.x = random_pos_bar(bar);
-    sfSprite_setPosition(bar->sprite, bar->pos);
+    sfRectangleShape_setPosition(bar->rectangle, bar->rect_pos);
 }
 
 
