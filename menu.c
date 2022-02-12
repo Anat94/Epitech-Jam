@@ -59,11 +59,6 @@ int main(int argc, char **argv)
         }
         sfRenderWindow_drawSprite(gorilla.window, gorilla.menu.sprite, NULL);
         sfRenderWindow_display(gorilla.window);
-        if (strcmp(gorilla.menu.gamemode, "Corde") == 0)
-            printf("GAME MENU = CORDE\n");
-            corde(&gorilla);
-        if (strcmp(gorilla.menu.gamemode, "fitness") == 0)
-            printf("GAME MENU = FITNESS\n");
     }
     return 0;
 }
