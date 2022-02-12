@@ -50,10 +50,9 @@ void create_text(gorilla_t *gorilla)
 
 float random_pos_bar(bar_t *bar)
 {
-    return (rand() % (400 - (int)bar->rect_size.x)) + (1920/2-193);
+    return (rand() % (397 - (int)bar->rect_size.x)) + (1920/2-193);
 }
 
-// a appeler quand il clique au bon moment
 void new_round(bar_t *bar, int round) {
     bar->rect_size.x = 100 - (round * 15);
     bar->rect_pos.x = random_pos_bar(bar);
@@ -121,7 +120,7 @@ int main(int argc, char **argv)
     gorilla.fond = sfMusic_createFromFile("media/Music/music_bg.ogg");
     sfMusic_play(gorilla.fond);
     sfMusic_setLoop(gorilla.fond, true);
-    sfMusic_setVolume(gorilla.fond, 75);
+    gorilla.hurt = sfMusic_createFromFile("media/Music/classic_hurt.ogg");
     bool aller = true;
     while (sfRenderWindow_isOpen(gorilla.window)) {
 
@@ -129,6 +128,7 @@ int main(int argc, char **argv)
         while (sfRenderWindow_pollEvent(gorilla.window, &event)) {
             if (event.type == sfEvtClosed) {
                 sfMusic_destroy(gorilla.fond);
+                sfMusic_destroy(gorilla.hurt);
                 sfRenderWindow_close(gorilla.window);
             }
             if (sfKeyboard_isKeyPressed(sfKeyP)) {
@@ -154,6 +154,8 @@ int main(int argc, char **argv)
                     sfText_setString(gorilla.quote.text, str);
                 } else {
                     //aie
+                    sfMusic_stop(gorilla.hurt);
+                    sfMusic_play(gorilla.hurt);
                 }
             }
         }

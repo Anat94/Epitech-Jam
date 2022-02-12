@@ -80,6 +80,7 @@ typedef struct gorilla_s {
     sfBool win;
     sfBool pause;
     sfMusic *fond;
+    sfMusic *hurt;
     gorille_sprite_t gorille;
     bg_sprite_t bg;
     quote_t quote;
