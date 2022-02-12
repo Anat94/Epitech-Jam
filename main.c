@@ -62,6 +62,10 @@ int main(int argc, char **argv)
     create_sprite(&gorilla);
     create_bg(&gorilla);
     create_text(&gorilla);
+    srand(time(NULL));
+    int i = rand() % 15;
+    printf("i = %d\n", i);
+    init_bdd(&gorilla);
     while (sfRenderWindow_isOpen(gorilla.window)) {
         sfRenderWindow_clear(gorilla.window, sfBlack);
         while (sfRenderWindow_pollEvent(gorilla.window, &event)) {
@@ -78,7 +82,13 @@ int main(int argc, char **argv)
             sfRenderWindow_drawSprite(gorilla.window, gorilla.bg.sprite, NULL);
             sfRenderWindow_drawSprite(gorilla.window, gorilla.gorille.sprite, NULL);
             move_rect(&gorilla);
-            sfText_setString(gorilla.quote.text, "abcde");
+            char *str = gorilla.quote_bdd[i];
+            printf("%s\n", str);
+            if (i == 23)
+                i = 0;
+            else
+                i++;
+            sfText_setString(gorilla.quote.text, str);
             sfRenderWindow_drawText(gorilla.window, gorilla.quote.text, NULL);
             sfRenderWindow_display(gorilla.window);
         }
