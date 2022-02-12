@@ -2,6 +2,7 @@
     "files.associations": {
         "window.h": "c",
         "stdbool.h": "c",
-        "gorilla.h": "c"
+        "gorilla.h": "c",
+        "sstream": "c"
     }
 }

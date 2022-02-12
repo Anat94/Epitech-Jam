@@ -39,11 +39,11 @@ void move_rect(gorilla_t *gorilla)
 void create_text(gorilla_t *gorilla)
 {
     gorilla->quote.text = sfText_create();
-    gorilla->quote.position = (sfVector2f){800, 50};
+    gorilla->quote.position = (sfVector2f){300, 50};
     sfText_setPosition(gorilla->quote.text, gorilla->quote.position);
     sfFont *F_score = sfFont_createFromFile("media/Fonts/Candy_Beans.otf");
     sfText_setFont(gorilla->quote.text, F_score);
-    sfText_setCharacterSize(gorilla->quote.text, 50);
+    sfText_setCharacterSize(gorilla->quote.text, 25);
 }
 
 int main(int argc, char **argv)
@@ -64,7 +64,6 @@ int main(int argc, char **argv)
     create_text(&gorilla);
     srand(time(NULL));
     int i = rand() % 15;
-    printf("i = %d\n", i);
     init_bdd(&gorilla);
     while (sfRenderWindow_isOpen(gorilla.window)) {
         sfRenderWindow_clear(gorilla.window, sfBlack);
@@ -82,8 +81,8 @@ int main(int argc, char **argv)
             sfRenderWindow_drawSprite(gorilla.window, gorilla.bg.sprite, NULL);
             sfRenderWindow_drawSprite(gorilla.window, gorilla.gorille.sprite, NULL);
             move_rect(&gorilla);
+            printf("%s\n", gorilla.quote_bdd[i]);
             char *str = gorilla.quote_bdd[i];
-            printf("%s\n", str);
             if (i == 23)
                 i = 0;
             else
