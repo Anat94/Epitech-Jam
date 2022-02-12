@@ -9,7 +9,8 @@
 #include <string.h>
 #include <time.h>
 
-void create_sprite2(gorilla_t *gorilla) {
+void create_sprite2(gorilla_t *gorilla)
+{
     gorilla->gorille.sprite = sfSprite_create();
     gorilla->gorille.texture = sfTexture_createFromFile("media/fitness.png", NULL);
     gorilla->gorille.position = (sfVector2f){1920.0/2.0 - 250.0, 500};
@@ -19,7 +20,8 @@ void create_sprite2(gorilla_t *gorilla) {
     sfSprite_setTextureRect(gorilla->gorille.sprite, gorilla->gorille.rect);
 }
 
-void create_bg2(gorilla_t *gorilla) {
+void create_bg2(gorilla_t *gorilla)
+{
     gorilla->bg.sprite = sfSprite_create();
     gorilla->bg.texture = sfTexture_createFromFile("media/antarctique.jpg", NULL);
     gorilla->bg.scale = (sfVector2f){1.875, 1.40625};

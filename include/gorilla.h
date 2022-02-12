@@ -69,7 +69,6 @@ typedef struct quote_s{
     char *str;
     sfText *text;
     sfVector2f position;
-
 } quote_t;
 
 typedef struct menu_s {
@@ -79,6 +78,11 @@ typedef struct menu_s {
     sfBool fitness;
     char * gamemode;
 } menu_t;
+
+typedef struct victory_s {
+    sfSprite *sprite;
+    sfTexture *texture;
+} victory_t;
 
 typedef struct gorilla_s {
     sfRenderWindow *window;
@@ -98,6 +102,7 @@ typedef struct gorilla_s {
     bool is_jumping;
     int happy;
     int angry;
+    victory_t victory;
 } gorilla_t;
 
 

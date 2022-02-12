@@ -27,6 +27,13 @@ void create_bg(gorilla_t *gorilla) {
     sfSprite_setScale(gorilla->bg.sprite, gorilla->bg.scale);
 }
 
+void create_victory(gorilla_t *gorilla) {
+    gorilla->victory.sprite = sfSprite_create();
+    gorilla->victory.texture = sfTexture_createFromFile("media/winnerCorde.png", NULL);
+    sfSprite_setPosition(gorilla->victory.sprite, (sfVector2f){0.0, 0.0});
+    sfSprite_setTexture(gorilla->victory.sprite, gorilla->victory.texture, sfTrue);
+}
+
 void move_rect(gorilla_t *gorilla)
 {
     if (gorilla->is_jumping == true) {
@@ -135,6 +142,7 @@ int corde(gorilla_t *gorilla)
 //-------------------------------------------------------------------------------
     create_sprite(gorilla);
     create_bg(gorilla);
+    create_victory(gorilla);
     create_text(gorilla);
     srand(time(NULL));
     int i = rand() % 15;
@@ -148,7 +156,7 @@ int corde(gorilla_t *gorilla)
 
     bool aller = true;
     gorilla->clock = sfClock_create();
-
+    sfSprite_setOrigin(gorilla->victory.sprite, (sfVector2f){0, 0});
     while (sfRenderWindow_isOpen(gorilla->window)) {
         sfRenderWindow_clear(gorilla->window, sfBlack);
         while (sfRenderWindow_pollEvent(gorilla->window, &event)) {
@@ -211,7 +219,7 @@ int corde(gorilla_t *gorilla)
             sfRenderWindow_drawRectangleShape(gorilla->window, gorilla->cursor.rectangle, NULL);
 
             sfRenderWindow_drawSprite(gorilla->window, bulle_s, NULL);
-            sfRenderWindow_drawSprite(gorilla->window, gorilla_s, NULL);            
+            sfRenderWindow_drawSprite(gorilla->window, gorilla_s, NULL);
             sfRenderWindow_drawText(gorilla->window, gorilla->quote.text, NULL);
             if (sfTime_asSeconds(sfClock_getElapsedTime(clock_wait)) > 3) {
                 gorilla->is_jumping = false;
@@ -229,6 +237,10 @@ int corde(gorilla_t *gorilla)
             else
                 gorilla->cursor.position.x -= 10;
             sfRectangleShape_setPosition(gorilla->cursor.rectangle, gorilla->cursor.position);
+            sfRenderWindow_display(gorilla->window);
+        } else if (gorilla->win == true) {
+            sfRenderWindow_clear(gorilla->window, sfBlack);
+            sfRenderWindow_drawSprite(gorilla->window, gorilla->victory.sprite, NULL);
             sfRenderWindow_display(gorilla->window);
         }
     }
