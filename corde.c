@@ -113,23 +113,12 @@ int corde(gorilla_t *gorilla)
     gorilla->angry = 0;
     gorilla->happy = 0;
     sfSprite_setTexture(bulle_s, bulle_t, sfFalse);
+    sfSprite_setTexture(gorilla_s, pas_content_t, sfFalse);
     sfSprite_setTexture(gorilla_s, cool_t, sfFalse);
     sfSprite_setPosition(gorilla_s, gorille_pos);
     sfSprite_scale(bulle_s, scale_bulle);
     sfSprite_scale(gorilla_s, scale_gorille);
 /*-------------------------------------------------------------------------------*/
-
-
-
-
-
-
-
-
-
-
-
-
 
 //---------------------------Create cursor---------------------------------------
     gorilla->cursor.sprite = sfSprite_create();
