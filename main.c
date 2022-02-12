@@ -63,10 +63,22 @@ int main(int argc, char **argv)
     gorilla.score = 0;
     gorilla.clock = sfClock_create();
 
-
+//-------------------------------------------------------------------------------
+    sfSprite *bar_s = sfSprite_create();
+    sfTexture *bar_t = sfTexture_createFromFile("media/BAR_vide.png", NULL);
     sfRectangleShape *rectangle = sfRectangleShape_create();
-    sfVector2f rectangle_size = {200, 300};
+    sfVector2f rectangle_size = {100, 63};
+    sfVector2f bar_pos = {(1920/2-(200)), 900};
+    sfVector2f scale = {0.5, 0.5};
+    sfVector2f rectangle_pos = {1920/2-150, 907};
+
     sfRectangleShape_setSize(rectangle, rectangle_size);
+    sfRectangleShape_setFillColor(rectangle, sfGreen);
+    sfRectangleShape_setPosition(rectangle, rectangle_pos);
+    sfSprite_setPosition(bar_s, bar_pos);
+    sfSprite_setScale(bar_s, scale);
+    sfSprite_setTexture(bar_s, bar_t, sfFalse);
+//-------------------------------------------------------------------------------
     create_sprite(&gorilla);
     create_bg(&gorilla);
     create_text(&gorilla);
@@ -74,11 +86,15 @@ int main(int argc, char **argv)
     int i = rand() % 15;
     init_bdd(&gorilla);
     char *str = " ";
+    gorilla.fond = sfMusic_createFromFile("media/Music/music_bg.ogg");
+    sfMusic_play(gorilla.fond);
+    sfMusic_setLoop(gorilla.fond, true);
+    sfMusic_setVolume(gorilla.fond, 75);
     while (sfRenderWindow_isOpen(gorilla.window)) {
-        sfRenderWindow_drawRectangleShape(gorilla.window, rectangle, NULL);
         sfRenderWindow_clear(gorilla.window, sfBlack);
         while (sfRenderWindow_pollEvent(gorilla.window, &event)) {
             if (event.type == sfEvtClosed) {
+                sfMusic_destroy(gorilla.fond);
                 sfRenderWindow_close(gorilla.window);
             }
             if (sfKeyboard_isKeyPressed(sfKeyP)) {
@@ -90,6 +106,8 @@ int main(int argc, char **argv)
         }
         if (gorilla.pause == false && gorilla.win == false && gorilla.over == false) {
             sfRenderWindow_drawSprite(gorilla.window, gorilla.bg.sprite, NULL);
+            sfRenderWindow_drawSprite(gorilla.window, bar_s, NULL);
+            sfRenderWindow_drawRectangleShape(gorilla.window, rectangle, NULL);
             sfRenderWindow_drawSprite(gorilla.window, gorilla.gorille.sprite, NULL);
             sfRenderWindow_drawText(gorilla.window, gorilla.quote.text, NULL);
             move_rect(&gorilla);

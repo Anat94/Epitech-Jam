@@ -48,12 +48,20 @@ typedef struct bg_sprite_s {
     sfVector2f scale;
 } bg_sprite_t;
 
+typedef struct bar_s {
+    sfSprite *sprite;
+    sfTexture *texture;
+    sfRectangleShape *rectangle;
+}bar_t;
+
+
 typedef struct quote_s{
     char *str;
     sfText *text;
     sfVector2f position;
 
 } quote_t;
+
 typedef struct gorilla_s {
     sfRenderWindow *window;
     sfClock *clock;
