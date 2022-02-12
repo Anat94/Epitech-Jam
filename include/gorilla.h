@@ -95,8 +95,11 @@ typedef struct gorilla_s {
     cursor_t cursor;
     char **quote_bdd;
     menu_t menu;
+    bool is_jumping;
 } gorilla_t;
 
 
 int call_API(void);
 void init_bdd(gorilla_t *gorilla);
+int corde(gorilla_t *gorilla);
+

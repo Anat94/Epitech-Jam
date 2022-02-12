@@ -47,6 +47,7 @@ int main(int argc, char **argv)
             if (gorilla.menu.corde == true) {
                 if (sfKeyboard_isKeyPressed(sfKeyEnter)) {
                     gorilla.menu.gamemode = strdup("Corde");
+                    corde(&gorilla);
                 }
             }
             if (gorilla.menu.fitness == true){
@@ -60,6 +61,7 @@ int main(int argc, char **argv)
         sfRenderWindow_display(gorilla.window);
         if (strcmp(gorilla.menu.gamemode, "Corde") == 0)
             printf("GAME MENU = CORDE\n");
+            corde(&gorilla);
         if (strcmp(gorilla.menu.gamemode, "fitness") == 0)
             printf("GAME MENU = FITNESS\n");
     }

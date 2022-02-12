@@ -1,7 +1,7 @@
 /*
 ** EPITECH PROJECT, 2021
 ** install_repo
-** File description:
+** File description:    1350
 ** main.c
 */
 
@@ -11,13 +11,13 @@
 
 void create_sprite(gorilla_t *gorilla) {
     gorilla->gorille.sprite = sfSprite_create();
-    gorilla->gorille.texture = sfTexture_createFromFile("media/singe.png", NULL);
-    gorilla->gorille.position = (sfVector2f){1920.0/2.0 - 65.0, 500};
-    gorilla->gorille.scale = (sfVector2f){2,2};
-    gorilla->gorille.rect = (sfIntRect){0, 0, 130, 180};
+    gorilla->gorille.texture = sfTexture_createFromFile("media/unnamed.png", NULL);
+    gorilla->gorille.position = (sfVector2f){1920.0/2.0 - 250.0, 500};
+    //gorilla->gorille.scale = (sfVector2f){2,2};
+    gorilla->gorille.rect = (sfIntRect){0, 0, 500, 389};
     sfSprite_setTexture(gorilla->gorille.sprite, gorilla->gorille.texture, sfTrue);
     sfSprite_setPosition(gorilla->gorille.sprite, gorilla->gorille.position);
-    sfSprite_setScale(gorilla->gorille.sprite, gorilla->gorille.scale);
+    //sfSprite_setScale(gorilla->gorille.sprite, gorilla->gorille.scale);
     sfSprite_setTextureRect(gorilla->gorille.sprite, gorilla->gorille.rect);
 }
 
@@ -31,11 +31,14 @@ void create_bg(gorilla_t *gorilla) {
 
 void move_rect(gorilla_t *gorilla)
 {
-    if (gorilla->gorille.rect.left >= 1430)
-        gorilla->gorille.rect.left = 0;
-    else
-        gorilla->gorille.rect.left = gorilla->gorille.rect.left + 130;
-    sfSprite_setTextureRect(gorilla->gorille.sprite, gorilla->gorille.rect);
+    gorilla->gorille.rect.left = 1550;
+    if (gorilla->is_jumping == true) {
+        if (gorilla->gorille.rect.left >= 15500)
+            gorilla->gorille.rect.left = 13500;
+        else
+            gorilla->gorille.rect.left = gorilla->gorille.rect.left + 500;
+        sfSprite_setTextureRect(gorilla->gorille.sprite, gorilla->gorille.rect);
+    }
 }
 
 void create_text(gorilla_t *gorilla)
@@ -61,19 +64,16 @@ void new_round(bar_t *bar, int round) {
 }
 
 
-int main(int argc, char **argv)
+int corde(gorilla_t *gorilla)
 {
-    gorilla_t gorilla;
     sfEvent event;
-    sfVideoMode mode = {1920, 1080, 64};
-    gorilla.window = sfRenderWindow_create(mode, "MY_GORLILA", sfResize | sfClose, NULL);
-    sfRenderWindow_setPosition(gorilla.window, (sfVector2i){0, 0});
-    sfRenderWindow_setFramerateLimit(gorilla.window, 12);
-    gorilla.over = false;
-    gorilla.win = false;
-    gorilla.pause = false;
-    gorilla.score = 0;
-    gorilla.clock = sfClock_create();
+    gorilla->over = false;
+    gorilla->win = false;
+    gorilla->pause = false;
+    gorilla->score = 0;
+    gorilla->clock = sfClock_create();
+    sfClock *clock_wait = sfClock_create();
+
 
 /*------------------------------BAR----------------------------------------------*/
     bar_t *bar = malloc(sizeof(bar_t));
@@ -98,97 +98,101 @@ int main(int argc, char **argv)
 /*-------------------------------------------------------------------------------*/
 
 //---------------------------Create cursor---------------------------------------
-    gorilla.cursor.sprite = sfSprite_create();
-    gorilla.cursor.texture = sfTexture_createFromFile("media/BarreMillieu.png", NULL);
-    gorilla.cursor.rectangle = sfRectangleShape_create();
-    gorilla.cursor.position = (sfVector2f){774, bar->rect_pos.y};
-    gorilla.cursor.size = (sfVector2f){5.0, 63.0};
-    sfRectangleShape_setPosition(gorilla.cursor.rectangle, gorilla.cursor.position);
-    sfRectangleShape_setFillColor(gorilla.cursor.rectangle, sfBlack);
-    sfRectangleShape_setPosition(gorilla.cursor.rectangle, gorilla.cursor.position);
-    sfRectangleShape_setSize(gorilla.cursor.rectangle, gorilla.cursor.size);
-    sfSprite_setTexture(gorilla.cursor.sprite, gorilla.cursor.texture, sfFalse);
+    gorilla->cursor.sprite = sfSprite_create();
+    gorilla->cursor.texture = sfTexture_createFromFile("media/BarreMillieu.png", NULL);
+    gorilla->cursor.rectangle = sfRectangleShape_create();
+    gorilla->cursor.position = (sfVector2f){774, bar->rect_pos.y};
+    gorilla->cursor.size = (sfVector2f){5.0, 63.0};
+    sfRectangleShape_setPosition(gorilla->cursor.rectangle, gorilla->cursor.position);
+    sfRectangleShape_setFillColor(gorilla->cursor.rectangle, sfBlack);
+    sfRectangleShape_setPosition(gorilla->cursor.rectangle, gorilla->cursor.position);
+    sfRectangleShape_setSize(gorilla->cursor.rectangle, gorilla->cursor.size);
+    sfSprite_setTexture(gorilla->cursor.sprite, gorilla->cursor.texture, sfFalse);
 
 //-------------------------------------------------------------------------------
-    create_sprite(&gorilla);
-    create_bg(&gorilla);
-    create_text(&gorilla);
+    create_sprite(gorilla);
+    create_bg(gorilla);
+    create_text(gorilla);
     srand(time(NULL));
     int i = rand() % 15;
-    init_bdd(&gorilla);
+    init_bdd(gorilla);
     char *str = " ";
-    gorilla.fond = sfMusic_createFromFile("media/Music/music_bg.ogg");
-    sfMusic_play(gorilla.fond);
-    sfMusic_setLoop(gorilla.fond, true);
-    gorilla.hurt = sfMusic_createFromFile("media/Music/classic_hurt.ogg");
+    gorilla->fond = sfMusic_createFromFile("media/Music/music_bg.ogg");
+    sfMusic_play(gorilla->fond);
+    sfMusic_setLoop(gorilla->fond, true);
+    gorilla->hurt = sfMusic_createFromFile("media/Music/classic_hurt.ogg");
     sfMusic *win_sound = sfMusic_createFromFile("media/Music/jecodeaveclecul.ogg");
 
     bool aller = true;
-    gorilla.clock = sfClock_create();
+    gorilla->clock = sfClock_create();
 
-    while (sfRenderWindow_isOpen(gorilla.window)) {
-
-        sfRenderWindow_clear(gorilla.window, sfBlack);
-        while (sfRenderWindow_pollEvent(gorilla.window, &event)) {
+    while (sfRenderWindow_isOpen(gorilla->window)) {
+        sfRenderWindow_clear(gorilla->window, sfBlack);
+        while (sfRenderWindow_pollEvent(gorilla->window, &event)) {
             if (event.type == sfEvtClosed) {
-                sfMusic_destroy(gorilla.fond);
-                sfMusic_destroy(gorilla.hurt);
-                sfRenderWindow_close(gorilla.window);
+                sfMusic_destroy(gorilla->fond);
+                sfMusic_destroy(gorilla->hurt);
+                sfRenderWindow_close(gorilla->window);
             }
             if (sfKeyboard_isKeyPressed(sfKeyP)) {
-                gorilla.pause = true;
+                gorilla->pause = true;
             }
             if (sfKeyboard_isKeyPressed(sfKeyN)) {
-                gorilla.pause = false;
+                gorilla->pause = false;
             }
 
             if (sfKeyboard_isKeyPressed(sfKeySpace) || (event.type == sfEvtJoystickButtonPressed)) {
-                if (sfTime_asMilliseconds(sfClock_getElapsedTime(gorilla.clock)) > 1) {
-                    if (((gorilla.cursor.position.x + gorilla.cursor.size.x) >= bar->rect_pos.x) && ((gorilla.cursor.position.x + gorilla.cursor.size.x) <= (bar->rect_pos.x + bar->rect_size.x))) {
-                        new_round(bar, gorilla.score);
-                        gorilla.score++;
-                        str = gorilla.quote_bdd[i];
+                if (sfTime_asMilliseconds(sfClock_getElapsedTime(gorilla->clock)) > 1) {
+                    if (((gorilla->cursor.position.x + gorilla->cursor.size.x) >= bar->rect_pos.x) && ((gorilla->cursor.position.x + gorilla->cursor.size.x) <= (bar->rect_pos.x + bar->rect_size.x))) {
+                        new_round(bar, gorilla->score);
+                        gorilla->is_jumping = true;
+                        gorilla->score++;
+                        str = gorilla->quote_bdd[i];
                         if (strlen(str) > 75)
-                            sfText_setCharacterSize(gorilla.quote.text, 25);
+                            sfText_setCharacterSize(gorilla->quote.text, 25);
                         else
-                            sfText_setCharacterSize(gorilla.quote.text, 50);
+                            sfText_setCharacterSize(gorilla->quote.text, 50);
 
                         if (i == 23)
                             i = 0;
                         else
                             i++;
-                        sfText_setString(gorilla.quote.text, str);
+                        sfText_setString(gorilla->quote.text, str);
                         printf("JE RENTRE DANS LE IF\n");
+                        sfClock_restart(clock_wait);
                     } else {
-                        sfMusic_stop(gorilla.hurt);
-                        sfMusic_play(gorilla.hurt);
+                        sfMusic_stop(gorilla->hurt);
+                        sfMusic_play(gorilla->hurt);
                         printf("JE RENTRE DANS LE ELSE\n");
                     }
-                    sfClock_restart(gorilla.clock);
+                    sfClock_restart(gorilla->clock);
                 }
             }
         }
-        if (gorilla.pause == false && gorilla.win == false && gorilla.over == false) {
-            sfRenderWindow_drawSprite(gorilla.window, gorilla.bg.sprite, NULL);
-            sfRenderWindow_drawSprite(gorilla.window, bar->sprite, NULL);
-            sfRenderWindow_drawSprite(gorilla.window, gorilla.gorille.sprite, NULL);
-            sfRenderWindow_drawRectangleShape(gorilla.window, bar->rectangle, NULL);
-            sfRenderWindow_drawRectangleShape(gorilla.window, gorilla.cursor.rectangle, NULL);
-            sfRenderWindow_drawText(gorilla.window, gorilla.quote.text, NULL);
-            move_rect(&gorilla);
-            if (bar->rect_size.x <= 5){
-                gorilla.win = true;
+        if (gorilla->pause == false && gorilla->win == false && gorilla->over == false) {
+            sfRenderWindow_drawSprite(gorilla->window, gorilla->bg.sprite, NULL);
+            sfRenderWindow_drawSprite(gorilla->window, bar->sprite, NULL);
+            sfRenderWindow_drawSprite(gorilla->window, gorilla->gorille.sprite, NULL);
+            sfRenderWindow_drawRectangleShape(gorilla->window, bar->rectangle, NULL);
+            sfRenderWindow_drawRectangleShape(gorilla->window, gorilla->cursor.rectangle, NULL);
+            sfRenderWindow_drawText(gorilla->window, gorilla->quote.text, NULL);
+            if (sfTime_asSeconds(sfClock_getElapsedTime(clock_wait)) >= 10) {
+                gorilla->is_jumping = false;
             }
-            if (gorilla.cursor.position.x > 1143)
+            move_rect(gorilla);
+            if (bar->rect_size.x <= 5){
+                gorilla->win = true;
+            }
+            if (gorilla->cursor.position.x > 1143)
                 aller = false;
-            if (gorilla.cursor.position.x <= 774)
+            if (gorilla->cursor.position.x <= 774)
                 aller = true;
             if (aller == true)
-                gorilla.cursor.position.x += 10;
+                gorilla->cursor.position.x += 10;
             else
-                gorilla.cursor.position.x -= 10;
-            sfRectangleShape_setPosition(gorilla.cursor.rectangle, gorilla.cursor.position);
-            sfRenderWindow_display(gorilla.window);
+                gorilla->cursor.position.x -= 10;
+            sfRectangleShape_setPosition(gorilla->cursor.rectangle, gorilla->cursor.position);
+            sfRenderWindow_display(gorilla->window);
         }
     }
     return 0;
