@@ -6,6 +6,9 @@
 */
 
 #include "gorilla.h"
+#include <string.h>
+#include <time.h>
+
 
 void create_sprite(gorilla_t *gorilla) {
     gorilla->gorille.sprite = sfSprite_create();
@@ -39,7 +42,7 @@ void move_rect(gorilla_t *gorilla)
 void create_text(gorilla_t *gorilla)
 {
     gorilla->quote.text = sfText_create();
-    gorilla->quote.position = (sfVector2f){300, 50};
+    gorilla->quote.position = (sfVector2f){150, 50};
     sfText_setPosition(gorilla->quote.text, gorilla->quote.position);
     sfFont *F_score = sfFont_createFromFile("media/Fonts/Candy_Beans.otf");
     sfText_setFont(gorilla->quote.text, F_score);
@@ -65,6 +68,7 @@ int main(int argc, char **argv)
     srand(time(NULL));
     int i = rand() % 15;
     init_bdd(&gorilla);
+    char *str = " ";
     while (sfRenderWindow_isOpen(gorilla.window)) {
         sfRenderWindow_clear(gorilla.window, sfBlack);
         while (sfRenderWindow_pollEvent(gorilla.window, &event)) {
@@ -81,20 +85,22 @@ int main(int argc, char **argv)
         if (gorilla.pause == false && gorilla.win == false && gorilla.over == false) {
             sfRenderWindow_drawSprite(gorilla.window, gorilla.bg.sprite, NULL);
             sfRenderWindow_drawSprite(gorilla.window, gorilla.gorille.sprite, NULL);
-            move_rect(&gorilla);
-            printf("%s\n", gorilla.quote_bdd[i]);
-            char *str = gorilla.quote_bdd[i];
-            if (strlen(str) > 100)
-                sfText_setCharacterSize(gorilla.quote.text, 25);
-            else
-                sfText_setCharacterSize(gorilla.quote.text, 50);
-
-            if (i == 23)
-                i = 0;
-            else
-                i++;
-            sfText_setString(gorilla.quote.text, str);
             sfRenderWindow_drawText(gorilla.window, gorilla.quote.text, NULL);
+            move_rect(&gorilla);
+            if (sfTime_asSeconds(sfClock_getElapsedTime(gorilla.clock)) > 1) {
+                str = gorilla.quote_bdd[i];
+                if (strlen(str) > 75)
+                    sfText_setCharacterSize(gorilla.quote.text, 25);
+                else
+                    sfText_setCharacterSize(gorilla.quote.text, 50);
+
+                if (i == 23)
+                    i = 0;
+                else
+                    i++;
+                sfText_setString(gorilla.quote.text, str);
+                sfClock_restart(gorilla.clock);
+            }
             sfRenderWindow_display(gorilla.window);
         }
     }
