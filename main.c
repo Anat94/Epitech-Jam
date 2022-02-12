@@ -62,6 +62,11 @@ int main(int argc, char **argv)
     gorilla.pause = false;
     gorilla.score = 0;
     gorilla.clock = sfClock_create();
+
+
+    sfRectangleShape *rectangle = sfRectangleShape_create();
+    sfVector2f rectangle_size = {200, 300};
+    sfRectangleShape_setSize(rectangle, rectangle_size);
     create_sprite(&gorilla);
     create_bg(&gorilla);
     create_text(&gorilla);
@@ -70,6 +75,7 @@ int main(int argc, char **argv)
     init_bdd(&gorilla);
     char *str = " ";
     while (sfRenderWindow_isOpen(gorilla.window)) {
+        sfRenderWindow_drawRectangleShape(gorilla.window, rectangle, NULL);
         sfRenderWindow_clear(gorilla.window, sfBlack);
         while (sfRenderWindow_pollEvent(gorilla.window, &event)) {
             if (event.type == sfEvtClosed) {
