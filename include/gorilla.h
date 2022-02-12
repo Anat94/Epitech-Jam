@@ -96,6 +96,8 @@ typedef struct gorilla_s {
     char **quote_bdd;
     menu_t menu;
     bool is_jumping;
+    int happy;
+    int angry;
 } gorilla_t;
 
 
