@@ -163,8 +163,6 @@ int fitness(gorilla_t *gorilla)
     sfMusic_play(gorilla->fond);
     sfMusic_setLoop(gorilla->fond, true);
     gorilla->hurt = sfMusic_createFromFile("media/Music/classic_hurt.ogg");
-    sfMusic *win_sound = sfMusic_createFromFile("media/Music/jecodeaveclecul.ogg");
-
     bool aller = true;
     bool exite = false;
     bool menu = false;
