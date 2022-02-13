@@ -358,7 +358,7 @@ int corde(gorilla_t *gorilla)
             sfRenderWindow_display(gorilla->window);
         } else if (gorilla->win == true) {
             if (sfMusic_getStatus(victory_sound) == sfStopped) {
-                sfMusic_setVolume(gorilla->fond, 75);  
+                sfMusic_setVolume(gorilla->fond, 75);
             } else {
                 sfMusic_setVolume(gorilla->fond, 25);
             }
