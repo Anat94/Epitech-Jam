@@ -172,6 +172,16 @@ int corde(gorilla_t *gorilla)
     gorilla->pauseS.exit = false;
     gorilla->clock = sfClock_create();
     sfSprite_setOrigin(gorilla->victory.sprite, (sfVector2f){0, 0});
+    /*-----------------PAUSE TEXT-------------------*/
+    sfText *text = sfText_create();
+    sfVector2f position = (sfVector2f){500, 50};
+    sfText_setPosition(text, position);
+    sfFont *F_score = sfFont_createFromFile("media/Fonts/Candy_Beans.otf");
+    sfText_setFont(text, F_score);
+    sfText_setColor(text, sfWhite);
+    sfText_setCharacterSize(text, 50);
+    sfText_setString(text, "PRESS 'ESCAPE' TO CONTINUE PLAYING");
+    /*----------------------------------------------*/
     while (sfRenderWindow_isOpen(gorilla->window)) {
         sfRenderWindow_clear(gorilla->window, sfBlack);
         while (sfRenderWindow_pollEvent(gorilla->window, &event)) {
@@ -349,6 +359,7 @@ int corde(gorilla_t *gorilla)
             }
             printf("replay = %d, menu = %d, exit = %d\n", gorilla->pauseS.replay, gorilla->pauseS.menu, gorilla->pauseS.exit);
             sfRenderWindow_drawSprite(gorilla->window, gorilla->pauseS.sprite, NULL);
+            sfRenderWindow_drawText(gorilla->window, text, NULL);
             sfRenderWindow_display(gorilla->window);
         }
     }
