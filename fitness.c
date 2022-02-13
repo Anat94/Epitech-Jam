@@ -183,12 +183,17 @@ int fitness(gorilla_t *gorilla)
     sfText_setCharacterSize(text, 50);
     sfText_setString(text, "PRESS 'ESCAPE' TO CONTINUE PLAYING");
     /*----------------------------------------------*/
+    sfMusic_setVolume(gorilla->fond, 50);
+    sfMusic *win_sound = sfMusic_createFromFile("media/Music/shia-do-it-mellow.ogg");
+    sfMusic *victory_sound = sfMusic_createFromFile("media/Music/shia-success.ogg");
     while (sfRenderWindow_isOpen(gorilla->window)) {
         sfRenderWindow_clear(gorilla->window, sfBlack);
         while (sfRenderWindow_pollEvent(gorilla->window, &event)) {
             if (event.type == sfEvtClosed) {
                 sfMusic_destroy(gorilla->fond);
                 sfMusic_destroy(gorilla->hurt);
+                sfMusic_destroy(win_sound);
+                sfMusic_destroy(victory_sound);
                 sfRenderWindow_close(gorilla->window);
             }
             if (gorilla->win == true && sfKeyboard_isKeyPressed(sfKeyLeft)) {
@@ -202,6 +207,8 @@ int fitness(gorilla_t *gorilla)
                     sfRenderWindow_clear(gorilla->window, sfBlack);
                     sfMusic_destroy(gorilla->fond);
                     sfMusic_destroy(gorilla->hurt);
+                    sfMusic_destroy(win_sound);
+                    sfMusic_destroy(victory_sound);
                     sfRenderWindow_close(gorilla->window);
                     menuuu();
                 }
@@ -216,6 +223,8 @@ int fitness(gorilla_t *gorilla)
                 if (sfKeyboard_isKeyPressed(sfKeyEnter)) {
                     sfMusic_destroy(gorilla->fond);
                     sfMusic_destroy(gorilla->hurt);
+                    sfMusic_destroy(win_sound);
+                    sfMusic_destroy(victory_sound);
                     sfRenderWindow_close(gorilla->window);
                     exit(0);
                 }
@@ -236,42 +245,43 @@ int fitness(gorilla_t *gorilla)
                     gorilla->pause = false;
                 }
                 if (sfKeyboard_isKeyPressed(sfKeyUp) && gorilla->pauseS.replay == true) {
-                    printf("111111111111111111\n");
                     gorilla->pauseS.exit = true;
                     gorilla->pauseS.replay = false;
                 } else if (sfKeyboard_isKeyPressed(sfKeyUp) && gorilla->pauseS.menu == true) {
-                    printf("222222222222222222\n");
                     gorilla->pauseS.replay = true;
                     gorilla->pauseS.menu = false;
                 } else if (sfKeyboard_isKeyPressed(sfKeyUp) && gorilla->pauseS.exit == true) {
-                    printf("33333333333333333\n");
                     gorilla->pauseS.menu = true;
                     gorilla->pauseS.exit = false;
                 } else if (sfKeyboard_isKeyPressed(sfKeyDown) && gorilla->pauseS.replay == true) {
-                    printf("444444444444444444\n");
                     gorilla->pauseS.menu = true;
                     gorilla->pauseS.replay = false;
                 } else if (sfKeyboard_isKeyPressed(sfKeyDown) && gorilla->pauseS.menu == true) {
-                    printf("55555555555555555\n");
                     gorilla->pauseS.exit = true;
                     gorilla->pauseS.menu = false;
                 } else if (sfKeyboard_isKeyPressed(sfKeyDown) && gorilla->pauseS.exit == true) {
-                    printf("666666666666666666666\n");
                     gorilla->pauseS.replay = true;
                     gorilla->pauseS.exit = false;
                 }
                 if (sfKeyboard_isKeyPressed(sfKeyEnter) && gorilla->pauseS.replay == true) {
                     sfMusic_destroy(gorilla->fond);
                     sfMusic_destroy(gorilla->hurt);
+                    
+                    sfMusic_destroy(win_sound);
+                    sfMusic_destroy(victory_sound);
                     fitness(gorilla);
                 } else if (sfKeyboard_isKeyPressed(sfKeyEnter) && gorilla->pauseS.menu == true) {
                     sfMusic_destroy(gorilla->fond);
                     sfMusic_destroy(gorilla->hurt);
+                    sfMusic_destroy(win_sound);
+                    sfMusic_destroy(victory_sound);
                     sfRenderWindow_close(gorilla->window);
                     menuuu();
                 } else if (sfKeyboard_isKeyPressed(sfKeyEnter) && gorilla->pauseS.exit == true) {
                     sfMusic_destroy(gorilla->fond);
                     sfMusic_destroy(gorilla->hurt);
+                    sfMusic_destroy(win_sound);
+                    sfMusic_destroy(victory_sound);
                     sfRenderWindow_close(gorilla->window);
                     exit(0);
                 }
@@ -279,6 +289,8 @@ int fitness(gorilla_t *gorilla)
             if (sfKeyboard_isKeyPressed(sfKeySpace) || (event.type == sfEvtJoystickButtonPressed)) {
                 if (sfTime_asMilliseconds(sfClock_getElapsedTime(gorilla->clock)) > 1) {
                     if ((((gorilla->cursor.position.x + gorilla->cursor.size.x) >= bar->rect_pos.x) && ((gorilla->cursor.position.x + gorilla->cursor.size.x) <= (bar->rect_pos.x + bar->rect_size.x))) && gorilla->is_jumping != true) {
+                        sfMusic_stop(win_sound);
+                        sfMusic_play(win_sound);
                         new_round2(bar, gorilla->score);
                         gorilla->is_jumping = true;
                         gorilla->score++;
@@ -299,7 +311,6 @@ int fitness(gorilla_t *gorilla)
                         if (gorilla->happy >= 3)
                             sfSprite_setTexture(gorilla_s, happy_t, sfFalse);
 
-                        printf("JE RENTRE DANS LE IF\n");
                         sfClock_restart(clock_wait);
                     } else {
                         gorilla->happy = 0;
@@ -309,13 +320,18 @@ int fitness(gorilla_t *gorilla)
                             sfSprite_setTexture(gorilla_s, pas_content_t, sfFalse);
                         sfMusic_stop(gorilla->hurt);
                         sfMusic_play(gorilla->hurt);
-                        printf("JE RENTRE DANS LE ELSE\n");
                     }
                     sfClock_restart(gorilla->clock);
                 }
             }
         }
         if (gorilla->pause == false && gorilla->win == false && gorilla->over == false) {
+            if (sfMusic_getStatus(win_sound) == sfStopped) {
+                sfMusic_setVolume(gorilla->fond, 75);  
+            } else {
+                sfMusic_setVolume(gorilla->fond, 25);
+                sfMusic_setVolume(win_sound, 75);
+            }
             sfRenderWindow_drawSprite(gorilla->window, gorilla->bg.sprite, NULL);
             sfRenderWindow_drawSprite(gorilla->window, bar->sprite, NULL);
             sfRenderWindow_drawSprite(gorilla->window, gorilla->gorille.sprite, NULL);
@@ -332,6 +348,8 @@ int fitness(gorilla_t *gorilla)
             move_rect2(gorilla);
             if (bar->rect_size.x <= 5){
                 gorilla->win = true;
+                sfMusic_play(victory_sound);
+
             }
             if (gorilla->cursor.position.x > 1143)
                 aller = false;
@@ -344,6 +362,11 @@ int fitness(gorilla_t *gorilla)
             sfRectangleShape_setPosition(gorilla->cursor.rectangle, gorilla->cursor.position);
             sfRenderWindow_display(gorilla->window);
         } else if (gorilla->win == true) {
+            if (sfMusic_getStatus(victory_sound) == sfStopped) {
+                sfMusic_setVolume(gorilla->fond, 75);  
+            } else {
+                sfMusic_setVolume(gorilla->fond, 25);
+            }
             sfRenderWindow_clear(gorilla->window, sfBlack);
             sfRenderWindow_drawSprite(gorilla->window, gorilla->victory.sprite, NULL);
             sfRenderWindow_display(gorilla->window);
@@ -357,9 +380,7 @@ int fitness(gorilla_t *gorilla)
             } else if (gorilla->pauseS.exit == true) {
                 gorilla->pauseS.texture = sfTexture_createFromFile("media/imgFitness/exit.jpg", NULL);
                 sfSprite_setTexture(gorilla->pauseS.sprite, gorilla->pauseS.texture, sfTrue);
-                printf("JE RENTRE DANS LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n");
             }
-            printf("replay = %d, menu = %d, exit = %d\n", gorilla->pauseS.replay, gorilla->pauseS.menu, gorilla->pauseS.exit);
             sfRenderWindow_drawSprite(gorilla->window, gorilla->pauseS.sprite, NULL);
             sfRenderWindow_drawText(gorilla->window, text, NULL);
             sfRenderWindow_display(gorilla->window);
