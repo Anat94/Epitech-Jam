@@ -163,7 +163,8 @@ int corde(gorilla_t *gorilla)
     gorilla->hurt = sfMusic_createFromFile("media/Music/classic_hurt.ogg");
 
 
-    sfMusic *win_sound = sfMusic_createFromFile("media/Music/hell_yeah.ogg");
+    sfMusic *win_sound = sfMusic_createFromFile("media/Music/shia-do-it-mellow.ogg");
+    sfMusic *victory_sound = sfMusic_createFromFile("media/Music/shia-success.ogg");
 
     bool aller = true;
     bool exite = false;
@@ -345,8 +346,9 @@ int corde(gorilla_t *gorilla)
                 gorilla->is_jumping = false;
             }
             move_rect(gorilla);
-            if (bar->rect_size.x <= 5){
+            if (bar->rect_size.x <= 50){
                 gorilla->win = true;
+                sfMusic_play(victory_sound);
             }
             if (gorilla->cursor.position.x > 1143)
                 aller = false;
@@ -359,6 +361,11 @@ int corde(gorilla_t *gorilla)
             sfRectangleShape_setPosition(gorilla->cursor.rectangle, gorilla->cursor.position);
             sfRenderWindow_display(gorilla->window);
         } else if (gorilla->win == true) {
+            if (sfMusic_getStatus(victory_sound) == sfStopped) {
+                sfMusic_setVolume(gorilla->fond, 75);  
+            } else {
+                sfMusic_setVolume(gorilla->fond, 25);
+            }
             sfRenderWindow_clear(gorilla->window, sfBlack);
             sfRenderWindow_drawSprite(gorilla->window, gorilla->victory.sprite, NULL);
             sfRenderWindow_display(gorilla->window);
