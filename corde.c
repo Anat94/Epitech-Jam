@@ -29,7 +29,7 @@ void create_bg(gorilla_t *gorilla) {
 
 void create_victory(gorilla_t *gorilla) {
     gorilla->victory.sprite = sfSprite_create();
-    gorilla->victory.texture = sfTexture_createFromFile("media/winnerCorde.png", NULL);
+    gorilla->victory.texture = sfTexture_createFromFile("media/winnerC.png", NULL);
     sfSprite_setPosition(gorilla->victory.sprite, (sfVector2f){0.0, 0.0});
     sfSprite_setTexture(gorilla->victory.sprite, gorilla->victory.texture, sfTrue);
     sfSprite_setScale(gorilla->victory.sprite, (sfVector2f){1, 0.97});
@@ -156,6 +156,8 @@ int corde(gorilla_t *gorilla)
     sfMusic *win_sound = sfMusic_createFromFile("media/Music/jecodeaveclecul.ogg");
 
     bool aller = true;
+    bool exite = false;
+    bool menu = false;
     gorilla->clock = sfClock_create();
     sfSprite_setOrigin(gorilla->victory.sprite, (sfVector2f){0, 0});
     while (sfRenderWindow_isOpen(gorilla->window)) {
@@ -166,13 +168,44 @@ int corde(gorilla_t *gorilla)
                 sfMusic_destroy(gorilla->hurt);
                 sfRenderWindow_close(gorilla->window);
             }
+            if (gorilla->win == true && sfKeyboard_isKeyPressed(sfKeyLeft)) {
+                gorilla->victory.texture = sfTexture_createFromFile("media/WinCMenu.png", NULL);
+                sfSprite_setTexture(gorilla->victory.sprite, gorilla->victory.texture, sfTrue);
+                sfRenderWindow_display(gorilla->window);
+                menu = true;
+            }
+            if (menu == true) {
+                if (sfKeyboard_isKeyPressed(sfKeyEnter)) {
+                    sfRenderWindow_clear(gorilla->window, sfBlack);
+                    sfMusic_destroy(gorilla->fond);
+                    sfMusic_destroy(gorilla->hurt);
+                    sfRenderWindow_close(gorilla->window);
+                    menuuu();
+                }
+            }
+            if (gorilla->win == true && sfKeyboard_isKeyPressed(sfKeyRight)) {
+                gorilla->victory.texture = sfTexture_createFromFile("media/WinCExit.png", NULL);
+                sfSprite_setTexture(gorilla->victory.sprite, gorilla->victory.texture, sfTrue);
+                sfRenderWindow_display(gorilla->window);
+                exite = true;
+            }
+            if (exite == true) {
+                if (sfKeyboard_isKeyPressed(sfKeyEnter)) {
+                    sfMusic_destroy(gorilla->fond);
+                    sfMusic_destroy(gorilla->hurt);
+                    sfRenderWindow_close(gorilla->window);
+                    exit(0);
+                }
+            }
             if (sfKeyboard_isKeyPressed(sfKeyP)) {
                 gorilla->pause = true;
             }
             if (sfKeyboard_isKeyPressed(sfKeyN)) {
                 gorilla->pause = false;
             }
-
+            if (sfKeyboard_isKeyPressed(sfKeyW)) {
+                gorilla->win = true;
+            }
             if (sfKeyboard_isKeyPressed(sfKeySpace) || (event.type == sfEvtJoystickButtonPressed)) {
                 if (sfTime_asMilliseconds(sfClock_getElapsedTime(gorilla->clock)) > 1) {
                     if ((((gorilla->cursor.position.x + gorilla->cursor.size.x) >= bar->rect_pos.x) && ((gorilla->cursor.position.x + gorilla->cursor.size.x) <= (bar->rect_pos.x + bar->rect_size.x))) && gorilla->is_jumping != true) {
@@ -213,6 +246,7 @@ int corde(gorilla_t *gorilla)
             }
         }
         if (gorilla->pause == false && gorilla->win == false && gorilla->over == false) {
+            printf("oeoeoeo\n");
             sfRenderWindow_drawSprite(gorilla->window, gorilla->bg.sprite, NULL);
             sfRenderWindow_drawSprite(gorilla->window, bar->sprite, NULL);
             sfRenderWindow_drawSprite(gorilla->window, gorilla->gorille.sprite, NULL);

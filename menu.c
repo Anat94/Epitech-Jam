@@ -18,6 +18,11 @@ void init_bg(gorilla_t *gorilla)
 
 int main(int argc, char **argv)
 {
+    menuuu();
+}
+
+int menuuu(void)
+{
     gorilla_t gorilla;
     sfVideoMode mode = {1920, 1080, 64};
     gorilla.window = sfRenderWindow_create(mode, "MY_GORLILA", sfResize | sfClose, NULL);
