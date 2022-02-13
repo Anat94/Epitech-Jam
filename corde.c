@@ -113,8 +113,6 @@ int corde(gorilla_t *gorilla)
     sfSprite_setTexture(bar->sprite, bar->texture, sfFalse);
 /*-------------------------------------------------------------------------------*/
 
-
-
 /*-----------------------------------phrases-------------------------------------*/
     sfSprite *bulle_s = sfSprite_create();
     sfTexture *bulle_t = sfTexture_createFromFile("media/bulle.png", NULL);
@@ -161,8 +159,11 @@ int corde(gorilla_t *gorilla)
     gorilla->fond = sfMusic_createFromFile("media/Music/music_bg.ogg");
     sfMusic_play(gorilla->fond);
     sfMusic_setLoop(gorilla->fond, true);
+    sfMusic_setVolume(gorilla->fond, 50);
     gorilla->hurt = sfMusic_createFromFile("media/Music/classic_hurt.ogg");
-    sfMusic *win_sound = sfMusic_createFromFile("media/Music/jecodeaveclecul.ogg");
+
+
+    sfMusic *win_sound = sfMusic_createFromFile("media/Music/hell_yeah.ogg");
 
     bool aller = true;
     bool exite = false;
@@ -188,6 +189,7 @@ int corde(gorilla_t *gorilla)
             if (event.type == sfEvtClosed) {
                 sfMusic_destroy(gorilla->fond);
                 sfMusic_destroy(gorilla->hurt);
+                sfMusic_destroy(win_sound);
                 sfRenderWindow_close(gorilla->window);
             }
             if (gorilla->win == true && sfKeyboard_isKeyPressed(sfKeyLeft)) {
@@ -201,6 +203,7 @@ int corde(gorilla_t *gorilla)
                     sfRenderWindow_clear(gorilla->window, sfBlack);
                     sfMusic_destroy(gorilla->fond);
                     sfMusic_destroy(gorilla->hurt);
+                    sfMusic_destroy(win_sound);
                     sfRenderWindow_close(gorilla->window);
                     menuuu();
                 }
@@ -215,6 +218,7 @@ int corde(gorilla_t *gorilla)
                 if (sfKeyboard_isKeyPressed(sfKeyEnter)) {
                     sfMusic_destroy(gorilla->fond);
                     sfMusic_destroy(gorilla->hurt);
+                    sfMusic_destroy(win_sound);
                     sfRenderWindow_close(gorilla->window);
                     exit(0);
                 }
@@ -262,15 +266,18 @@ int corde(gorilla_t *gorilla)
                 if (sfKeyboard_isKeyPressed(sfKeyEnter) && gorilla->pauseS.replay == true) {
                     sfMusic_destroy(gorilla->fond);
                     sfMusic_destroy(gorilla->hurt);
+                    sfMusic_destroy(win_sound);
                     corde(gorilla);
                 } else if (sfKeyboard_isKeyPressed(sfKeyEnter) && gorilla->pauseS.menu == true) {
                     sfMusic_destroy(gorilla->fond);
                     sfMusic_destroy(gorilla->hurt);
+                    sfMusic_destroy(win_sound);
                     sfRenderWindow_close(gorilla->window);
                     menuuu();
                 } else if (sfKeyboard_isKeyPressed(sfKeyEnter) && gorilla->pauseS.exit == true) {
                     sfMusic_destroy(gorilla->fond);
                     sfMusic_destroy(gorilla->hurt);
+                    sfMusic_destroy(win_sound);
                     sfRenderWindow_close(gorilla->window);
                     exit(0);
                 }
@@ -279,6 +286,9 @@ int corde(gorilla_t *gorilla)
                 if (sfTime_asMilliseconds(sfClock_getElapsedTime(gorilla->clock)) > 1) {
                     if ((((gorilla->cursor.position.x + gorilla->cursor.size.x) >= bar->rect_pos.x) && ((gorilla->cursor.position.x + gorilla->cursor.size.x) <= (bar->rect_pos.x + bar->rect_size.x))) && gorilla->is_jumping != true) {
                         new_round(bar, gorilla->score);
+                        sfMusic_stop(win_sound);
+
+                        sfMusic_play(win_sound);
                         gorilla->is_jumping = true;
                         gorilla->score++;
                         str = gorilla->quote_bdd[i];
@@ -315,6 +325,12 @@ int corde(gorilla_t *gorilla)
             }
         }
         if (gorilla->pause == false && gorilla->win == false && gorilla->over == false) {
+            if (sfMusic_getStatus(win_sound) == sfStopped) {
+                sfMusic_setVolume(gorilla->fond, 75);  
+            } else {
+                sfMusic_setVolume(gorilla->fond, 25);
+                sfMusic_setVolume(win_sound, 75);
+            }
             sfRenderWindow_drawSprite(gorilla->window, gorilla->bg.sprite, NULL);
             sfRenderWindow_drawSprite(gorilla->window, bar->sprite, NULL);
             sfRenderWindow_drawSprite(gorilla->window, gorilla->gorille.sprite, NULL);
