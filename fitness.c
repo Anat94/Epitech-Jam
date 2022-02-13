@@ -1,7 +1,7 @@
 /*
 ** EPITECH PROJECT, 2021
 ** install_repo
-** File description:    1350
+** File description:
 ** main.c
 */
 
@@ -9,24 +9,31 @@
 #include <string.h>
 #include <time.h>
 
-void create_sprite2(gorilla_t *gorilla)
-{
+void create_sprite2(gorilla_t *gorilla) {
     gorilla->gorille.sprite = sfSprite_create();
-    gorilla->gorille.texture = sfTexture_createFromFile("media/fitness.png", NULL);
-    gorilla->gorille.position = (sfVector2f){1920.0/2.0 - 250.0, 500};
+    gorilla->gorille.texture = sfTexture_createFromFile("media/imgFitness/fitness.png", NULL);
+    gorilla->gorille.position = (sfVector2f){1920.0/2.0 - 160.0, 500};
     gorilla->gorille.rect = (sfIntRect){0, 0, 360, 360};
     sfSprite_setTexture(gorilla->gorille.sprite, gorilla->gorille.texture, sfTrue);
     sfSprite_setPosition(gorilla->gorille.sprite, gorilla->gorille.position);
     sfSprite_setTextureRect(gorilla->gorille.sprite, gorilla->gorille.rect);
 }
 
-void create_bg2(gorilla_t *gorilla)
-{
+void create_bg2(gorilla_t *gorilla) {
     gorilla->bg.sprite = sfSprite_create();
-    gorilla->bg.texture = sfTexture_createFromFile("media/antarctique.jpg", NULL);
+    gorilla->bg.texture = sfTexture_createFromFile("media/imgFitness/antarctique.jpg", NULL);
+    gorilla->bg.scale = (sfVector2f){0.64, 0.54};
     gorilla->bg.scale = (sfVector2f){1.875, 1.40625};
     sfSprite_setTexture(gorilla->bg.sprite, gorilla->bg.texture, sfTrue);
     sfSprite_setScale(gorilla->bg.sprite, gorilla->bg.scale);
+}
+
+void create_victory2(gorilla_t *gorilla) {
+    gorilla->victory.sprite = sfSprite_create();
+    gorilla->victory.texture = sfTexture_createFromFile("media/imgFitness/win.png", NULL);
+    sfSprite_setPosition(gorilla->victory.sprite, (sfVector2f){0.0, 0.0});
+    sfSprite_setTexture(gorilla->victory.sprite, gorilla->victory.texture, sfTrue);
+    sfSprite_setScale(gorilla->victory.sprite, (sfVector2f){1, 0.97});
 }
 
 void move_rect2(gorilla_t *gorilla)
@@ -35,7 +42,7 @@ void move_rect2(gorilla_t *gorilla)
         if (gorilla->gorille.rect.left >= 5750)
             gorilla->gorille.rect.left = 0;
         else
-            gorilla->gorille.rect.left += 360;
+            gorilla->gorille.rect.left = gorilla->gorille.rect.left + 360;
         sfSprite_setTextureRect(gorilla->gorille.sprite, gorilla->gorille.rect);
     } else
         gorilla->gorille.rect.left = 0;
@@ -62,6 +69,14 @@ void new_round2(bar_t *bar, int round) {
     bar->rect_pos.x = random_pos_bar2(bar);
     sfRectangleShape_setSize(bar->rectangle, bar->rect_size);
     sfRectangleShape_setPosition(bar->rectangle, bar->rect_pos);
+}
+
+void create_pause2(gorilla_t *gorilla)
+{
+    gorilla->pauseS.sprite = sfSprite_create();
+    gorilla->pauseS.texture = sfTexture_createFromFile("media/imgFitness/pause.png", NULL);
+    sfSprite_setPosition(gorilla->pauseS.sprite, (sfVector2f){0.0, 0.0});
+    sfSprite_setTexture(gorilla->pauseS.sprite, gorilla->pauseS.texture, sfTrue);
 }
 
 
@@ -98,6 +113,9 @@ int fitness(gorilla_t *gorilla)
     sfSprite_setScale(bar->sprite, scale);
     sfSprite_setTexture(bar->sprite, bar->texture, sfFalse);
 /*-------------------------------------------------------------------------------*/
+
+
+
 /*-----------------------------------phrases-------------------------------------*/
     sfSprite *bulle_s = sfSprite_create();
     sfTexture *bulle_t = sfTexture_createFromFile("media/bulle.png", NULL);
@@ -118,6 +136,7 @@ int fitness(gorilla_t *gorilla)
     sfSprite_scale(bulle_s, scale_bulle);
     sfSprite_scale(gorilla_s, scale_gorille);
 /*-------------------------------------------------------------------------------*/
+
 //---------------------------Create cursor---------------------------------------
     gorilla->cursor.sprite = sfSprite_create();
     gorilla->cursor.texture = sfTexture_createFromFile("media/BarreMillieu.png", NULL);
@@ -133,10 +152,12 @@ int fitness(gorilla_t *gorilla)
 //-------------------------------------------------------------------------------
     create_sprite2(gorilla);
     create_bg2(gorilla);
+    create_victory2(gorilla);
     create_text2(gorilla);
     srand(time(NULL));
-    int i = rand() % 15;
     init_bdd(gorilla);
+    create_pause2(gorilla);
+    int i = rand() % 15;
     char *str = " ";
     gorilla->fond = sfMusic_createFromFile("media/Music/music_bg.ogg");
     sfMusic_play(gorilla->fond);
@@ -145,8 +166,23 @@ int fitness(gorilla_t *gorilla)
     sfMusic *win_sound = sfMusic_createFromFile("media/Music/jecodeaveclecul.ogg");
 
     bool aller = true;
+    bool exite = false;
+    bool menu = false;
+    gorilla->pauseS.replay = true;
+    gorilla->pauseS.menu = false;
+    gorilla->pauseS.exit = false;
     gorilla->clock = sfClock_create();
-
+    sfSprite_setOrigin(gorilla->victory.sprite, (sfVector2f){0, 0});
+    /*-----------------PAUSE TEXT-------------------*/
+    sfText *text = sfText_create();
+    sfVector2f position = (sfVector2f){500, 50};
+    sfText_setPosition(text, position);
+    sfFont *F_score = sfFont_createFromFile("media/Fonts/Candy_Beans.otf");
+    sfText_setFont(text, F_score);
+    sfText_setColor(text, sfWhite);
+    sfText_setCharacterSize(text, 50);
+    sfText_setString(text, "PRESS 'ESCAPE' TO CONTINUE PLAYING");
+    /*----------------------------------------------*/
     while (sfRenderWindow_isOpen(gorilla->window)) {
         sfRenderWindow_clear(gorilla->window, sfBlack);
         while (sfRenderWindow_pollEvent(gorilla->window, &event)) {
@@ -155,13 +191,91 @@ int fitness(gorilla_t *gorilla)
                 sfMusic_destroy(gorilla->hurt);
                 sfRenderWindow_close(gorilla->window);
             }
+            if (gorilla->win == true && sfKeyboard_isKeyPressed(sfKeyLeft)) {
+                gorilla->victory.texture = sfTexture_createFromFile("media/imgFitness/winM.png", NULL);
+                sfSprite_setTexture(gorilla->victory.sprite, gorilla->victory.texture, sfTrue);
+                sfRenderWindow_display(gorilla->window);
+                menu = true;
+            }
+            if (menu == true) {
+                if (sfKeyboard_isKeyPressed(sfKeyEnter)) {
+                    sfRenderWindow_clear(gorilla->window, sfBlack);
+                    sfMusic_destroy(gorilla->fond);
+                    sfMusic_destroy(gorilla->hurt);
+                    sfRenderWindow_close(gorilla->window);
+                    menuuu();
+                }
+            }
+            if (gorilla->win == true && sfKeyboard_isKeyPressed(sfKeyRight)) {
+                gorilla->victory.texture = sfTexture_createFromFile("media/imgFitness/winE.png", NULL);
+                sfSprite_setTexture(gorilla->victory.sprite, gorilla->victory.texture, sfTrue);
+                sfRenderWindow_display(gorilla->window);
+                exite = true;
+            }
+            if (exite == true) {
+                if (sfKeyboard_isKeyPressed(sfKeyEnter)) {
+                    sfMusic_destroy(gorilla->fond);
+                    sfMusic_destroy(gorilla->hurt);
+                    sfRenderWindow_close(gorilla->window);
+                    exit(0);
+                }
+            }
             if (sfKeyboard_isKeyPressed(sfKeyP)) {
                 gorilla->pause = true;
+
             }
             if (sfKeyboard_isKeyPressed(sfKeyN)) {
                 gorilla->pause = false;
             }
-
+            if (sfKeyboard_isKeyPressed(sfKeyW)) {
+                gorilla->win = true;
+            }
+            if(gorilla->pause == true)
+            {
+                if (sfKeyboard_isKeyPressed(sfKeyEscape)){
+                    gorilla->pause = false;
+                }
+                if (sfKeyboard_isKeyPressed(sfKeyUp) && gorilla->pauseS.replay == true) {
+                    printf("111111111111111111\n");
+                    gorilla->pauseS.exit = true;
+                    gorilla->pauseS.replay = false;
+                } else if (sfKeyboard_isKeyPressed(sfKeyUp) && gorilla->pauseS.menu == true) {
+                    printf("222222222222222222\n");
+                    gorilla->pauseS.replay = true;
+                    gorilla->pauseS.menu = false;
+                } else if (sfKeyboard_isKeyPressed(sfKeyUp) && gorilla->pauseS.exit == true) {
+                    printf("33333333333333333\n");
+                    gorilla->pauseS.menu = true;
+                    gorilla->pauseS.exit = false;
+                } else if (sfKeyboard_isKeyPressed(sfKeyDown) && gorilla->pauseS.replay == true) {
+                    printf("444444444444444444\n");
+                    gorilla->pauseS.menu = true;
+                    gorilla->pauseS.replay = false;
+                } else if (sfKeyboard_isKeyPressed(sfKeyDown) && gorilla->pauseS.menu == true) {
+                    printf("55555555555555555\n");
+                    gorilla->pauseS.exit = true;
+                    gorilla->pauseS.menu = false;
+                } else if (sfKeyboard_isKeyPressed(sfKeyDown) && gorilla->pauseS.exit == true) {
+                    printf("666666666666666666666\n");
+                    gorilla->pauseS.replay = true;
+                    gorilla->pauseS.exit = false;
+                }
+                if (sfKeyboard_isKeyPressed(sfKeyEnter) && gorilla->pauseS.replay == true) {
+                    sfMusic_destroy(gorilla->fond);
+                    sfMusic_destroy(gorilla->hurt);
+                    fitness(gorilla);
+                } else if (sfKeyboard_isKeyPressed(sfKeyEnter) && gorilla->pauseS.menu == true) {
+                    sfMusic_destroy(gorilla->fond);
+                    sfMusic_destroy(gorilla->hurt);
+                    sfRenderWindow_close(gorilla->window);
+                    menuuu();
+                } else if (sfKeyboard_isKeyPressed(sfKeyEnter) && gorilla->pauseS.exit == true) {
+                    sfMusic_destroy(gorilla->fond);
+                    sfMusic_destroy(gorilla->hurt);
+                    sfRenderWindow_close(gorilla->window);
+                    exit(0);
+                }
+            }
             if (sfKeyboard_isKeyPressed(sfKeySpace) || (event.type == sfEvtJoystickButtonPressed)) {
                 if (sfTime_asMilliseconds(sfClock_getElapsedTime(gorilla->clock)) > 1) {
                     if ((((gorilla->cursor.position.x + gorilla->cursor.size.x) >= bar->rect_pos.x) && ((gorilla->cursor.position.x + gorilla->cursor.size.x) <= (bar->rect_pos.x + bar->rect_size.x))) && gorilla->is_jumping != true) {
@@ -184,6 +298,7 @@ int fitness(gorilla_t *gorilla)
                         gorilla->happy += 1;
                         if (gorilla->happy >= 3)
                             sfSprite_setTexture(gorilla_s, happy_t, sfFalse);
+
                         printf("JE RENTRE DANS LE IF\n");
                         sfClock_restart(clock_wait);
                     } else {
@@ -206,9 +321,11 @@ int fitness(gorilla_t *gorilla)
             sfRenderWindow_drawSprite(gorilla->window, gorilla->gorille.sprite, NULL);
             sfRenderWindow_drawRectangleShape(gorilla->window, bar->rectangle, NULL);
             sfRenderWindow_drawRectangleShape(gorilla->window, gorilla->cursor.rectangle, NULL);
-            sfRenderWindow_drawSprite(gorilla->window, bulle_s, NULL);
-            sfRenderWindow_drawSprite(gorilla->window, gorilla_s, NULL); 
-            sfRenderWindow_drawText(gorilla->window, gorilla->quote.text, NULL);
+            if (gorilla->is_jumping == true) {
+                sfRenderWindow_drawSprite(gorilla->window, bulle_s, NULL);
+                sfRenderWindow_drawSprite(gorilla->window, gorilla_s, NULL);
+                sfRenderWindow_drawText(gorilla->window, gorilla->quote.text, NULL);
+            }
             if (sfTime_asSeconds(sfClock_getElapsedTime(clock_wait)) > 2.7) {
                 gorilla->is_jumping = false;
             }
@@ -225,6 +342,26 @@ int fitness(gorilla_t *gorilla)
             else
                 gorilla->cursor.position.x -= 10;
             sfRectangleShape_setPosition(gorilla->cursor.rectangle, gorilla->cursor.position);
+            sfRenderWindow_display(gorilla->window);
+        } else if (gorilla->win == true) {
+            sfRenderWindow_clear(gorilla->window, sfBlack);
+            sfRenderWindow_drawSprite(gorilla->window, gorilla->victory.sprite, NULL);
+            sfRenderWindow_display(gorilla->window);
+        } else if (gorilla->win == false && gorilla->pause == true) {
+            if (gorilla->pauseS.replay == true) {
+                gorilla->pauseS.texture = sfTexture_createFromFile("media/imgFitness/replay.png", NULL);
+                sfSprite_setTexture(gorilla->pauseS.sprite, gorilla->pauseS.texture, sfTrue);
+            } else if (gorilla->pauseS.menu == true) {
+                gorilla->pauseS.texture = sfTexture_createFromFile("media/imgFitness/Menu.png", NULL);
+                sfSprite_setTexture(gorilla->pauseS.sprite, gorilla->pauseS.texture, sfTrue);
+            } else if (gorilla->pauseS.exit == true) {
+                gorilla->pauseS.texture = sfTexture_createFromFile("media/imgFitness/exit.jpg", NULL);
+                sfSprite_setTexture(gorilla->pauseS.sprite, gorilla->pauseS.texture, sfTrue);
+                printf("JE RENTRE DANS LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n");
+            }
+            printf("replay = %d, menu = %d, exit = %d\n", gorilla->pauseS.replay, gorilla->pauseS.menu, gorilla->pauseS.exit);
+            sfRenderWindow_drawSprite(gorilla->window, gorilla->pauseS.sprite, NULL);
+            sfRenderWindow_drawText(gorilla->window, text, NULL);
             sfRenderWindow_display(gorilla->window);
         }
     }

@@ -342,7 +342,7 @@ int corde(gorilla_t *gorilla)
                 gorilla->cursor.position.x -= 10;
             sfRectangleShape_setPosition(gorilla->cursor.rectangle, gorilla->cursor.position);
             sfRenderWindow_display(gorilla->window);
-        } else if (gorilla->win == true && gorilla->win == false) {
+        } else if (gorilla->win == true) {
             sfRenderWindow_clear(gorilla->window, sfBlack);
             sfRenderWindow_drawSprite(gorilla->window, gorilla->victory.sprite, NULL);
             sfRenderWindow_display(gorilla->window);
