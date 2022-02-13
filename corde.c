@@ -320,10 +320,11 @@ int corde(gorilla_t *gorilla)
             sfRenderWindow_drawSprite(gorilla->window, gorilla->gorille.sprite, NULL);
             sfRenderWindow_drawRectangleShape(gorilla->window, bar->rectangle, NULL);
             sfRenderWindow_drawRectangleShape(gorilla->window, gorilla->cursor.rectangle, NULL);
-
-            sfRenderWindow_drawSprite(gorilla->window, bulle_s, NULL);
-            sfRenderWindow_drawSprite(gorilla->window, gorilla_s, NULL);
-            sfRenderWindow_drawText(gorilla->window, gorilla->quote.text, NULL);
+            if (gorilla->is_jumping == true) {
+                sfRenderWindow_drawSprite(gorilla->window, bulle_s, NULL);
+                sfRenderWindow_drawSprite(gorilla->window, gorilla_s, NULL);
+                sfRenderWindow_drawText(gorilla->window, gorilla->quote.text, NULL);
+            }
             if (sfTime_asSeconds(sfClock_getElapsedTime(clock_wait)) > 3) {
                 gorilla->is_jumping = false;
             }
