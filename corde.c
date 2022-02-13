@@ -351,9 +351,9 @@ int corde(gorilla_t *gorilla)
             if (gorilla->cursor.position.x <= 774)
                 aller = true;
             if (aller == true)
-                gorilla->cursor.position.x += 10;
+                gorilla->cursor.position.x += (10+(gorilla->score * 0.5));
             else
-                gorilla->cursor.position.x -= 10;
+                gorilla->cursor.position.x -= (10+(gorilla->score * 0.5));
             sfRectangleShape_setPosition(gorilla->cursor.rectangle, gorilla->cursor.position);
             sfRenderWindow_display(gorilla->window);
         } else if (gorilla->win == true) {
