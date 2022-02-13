@@ -41,11 +41,13 @@ int menuuu(void)
             if (sfKeyboard_isKeyPressed(sfKeyLeft)) {
                 gorilla.menu.texture = sfTexture_createFromFile("media/UnderlineCorde.png", NULL);
                 sfSprite_setTexture(gorilla.menu.sprite, gorilla.menu.texture, sfTrue);
+                gorilla.menu.fitness = false;
                 gorilla.menu.corde = true;
             }
             if (sfKeyboard_isKeyPressed(sfKeyRight)) {
                 gorilla.menu.texture = sfTexture_createFromFile("media/UnderlineFitness.png", NULL);
                 sfSprite_setTexture(gorilla.menu.sprite, gorilla.menu.texture, sfTrue);
+                gorilla.menu.corde = false;
                 gorilla.menu.fitness = true;
             }
             if (gorilla.menu.corde == true) {
