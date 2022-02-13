@@ -196,7 +196,6 @@ int corde(gorilla_t *gorilla)
             if (gorilla->win == true && sfKeyboard_isKeyPressed(sfKeyLeft)) {
                 gorilla->victory.texture = sfTexture_createFromFile("media/WinCMenu.png", NULL);
                 sfSprite_setTexture(gorilla->victory.sprite, gorilla->victory.texture, sfTrue);
-                sfRenderWindow_display(gorilla->window);
                 menu = true;
             }
             if (menu == true) {
@@ -213,7 +212,6 @@ int corde(gorilla_t *gorilla)
             if (gorilla->win == true && sfKeyboard_isKeyPressed(sfKeyRight)) {
                 gorilla->victory.texture = sfTexture_createFromFile("media/WinCExit.png", NULL);
                 sfSprite_setTexture(gorilla->victory.sprite, gorilla->victory.texture, sfTrue);
-                sfRenderWindow_display(gorilla->window);
                 exite = true;
             }
             if (exite == true) {
@@ -323,7 +321,7 @@ int corde(gorilla_t *gorilla)
         }
         if (gorilla->pause == false && gorilla->win == false && gorilla->over == false) {
             if (sfMusic_getStatus(win_sound) == sfStopped) {
-                sfMusic_setVolume(gorilla->fond, 75);  
+                sfMusic_setVolume(gorilla->fond, 75);
             } else {
                 sfMusic_setVolume(gorilla->fond, 25);
                 sfMusic_setVolume(win_sound, 75);
