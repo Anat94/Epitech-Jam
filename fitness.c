@@ -197,7 +197,6 @@ int fitness(gorilla_t *gorilla)
             if (gorilla->win == true && sfKeyboard_isKeyPressed(sfKeyLeft)) {
                 gorilla->victory.texture = sfTexture_createFromFile("media/imgFitness/winM.png", NULL);
                 sfSprite_setTexture(gorilla->victory.sprite, gorilla->victory.texture, sfTrue);
-                sfRenderWindow_display(gorilla->window);
                 menu = true;
             }
             if (menu == true) {
@@ -214,7 +213,6 @@ int fitness(gorilla_t *gorilla)
             if (gorilla->win == true && sfKeyboard_isKeyPressed(sfKeyRight)) {
                 gorilla->victory.texture = sfTexture_createFromFile("media/imgFitness/winE.png", NULL);
                 sfSprite_setTexture(gorilla->victory.sprite, gorilla->victory.texture, sfTrue);
-                sfRenderWindow_display(gorilla->window);
                 exite = true;
             }
             if (exite == true) {
