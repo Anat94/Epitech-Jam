@@ -84,6 +84,14 @@ typedef struct victory_s {
     sfTexture *texture;
 } victory_t;
 
+typedef struct pauseS_s {
+    sfSprite *sprite;
+    sfTexture *texture;
+    bool exit;
+    bool menu;
+    bool replay;
+} pauseS_t;
+
 typedef struct gorilla_s {
     sfRenderWindow *window;
     sfClock *clock;
@@ -103,6 +111,7 @@ typedef struct gorilla_s {
     int happy;
     int angry;
     victory_t victory;
+    pauseS_t pauseS;
 } gorilla_t;
 
 
